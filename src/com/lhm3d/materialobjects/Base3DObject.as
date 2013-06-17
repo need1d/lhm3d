@@ -38,7 +38,6 @@ package com.lhm3d.materialobjects
 		private var boundingBox:BoundingBox;
 		private var radius:Number;
 		
-		private var physicsTransform:Matrix3D;
 		
 		private var vertexLayer:Vector.<Number>; // save reference for physics
 		private var indexLayer:Vector.<uint>; // save reference for physics
@@ -82,13 +81,7 @@ package com.lhm3d.materialobjects
 		
 		public function getBoundingBox():BoundingBox {return boundingBox;}
 		
-		public function setPhysicsTransform(_transform:Matrix3D) : void {
-			physicsTransform = _transform;
-		}
 		
-		public function getPhysicsTransform(): Matrix3D {
-			return physicsTransform;
-		}
 		
 		
 		public function renderAtPosition(_x:Number, _y:Number, _z:Number):void {
@@ -108,10 +101,7 @@ package com.lhm3d.materialobjects
 			
 		}
 		
-		public function renderWithPhysicsTransform() : void {
-			renderWithMatrix(physicsTransform);
-		}
-		
+	
 		// Methoden, die überschrieben werden
 		
 		public function renderWithMatrix(_m:Matrix3D):void  {

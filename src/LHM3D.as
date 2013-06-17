@@ -29,7 +29,7 @@ package
 	import flash.geom.Vector3D;
 	import flash.utils.getTimer;
 	
-	[SWF(width="800", height="600", frameRate="60", backgroundColor="#FFFFFF")]
+	[SWF(width="800", height="600", frameRate="2", backgroundColor="#FFFFFF")]
 	
 	
 	

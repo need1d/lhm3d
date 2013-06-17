@@ -16,7 +16,17 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] src</name>
+			<name>[source path] away3d-core-fp11_4_0_11-src</name>
+			<type>2</type>
+			<location>/Users/lhm/Desktop/Creative/coindozer/away3d-core-fp11_4_0_11/src</location>
+		</link>
+		<link>
+			<name>[source path] awayphysics-core-fp11-src</name>
+			<type>2</type>
+			<location>/Users/lhm/Desktop/Creative/coindozer/awayphysics-core-fp11/src</location>
+		</link>
+		<link>
+			<name>[source path] jiglibflash-core-fp11-master-src</name>
 			<type>2</type>
 			<location>/Users/lhm/Desktop/Creative/coindozer/jiglibflash-core-fp11-master/src</location>
 		</link>

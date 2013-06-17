@@ -1,24 +1,29 @@
 package
 {
+	import awayphysics.collision.shapes.AWPBoxShape;
+	import awayphysics.collision.shapes.AWPConeShape;
+	import awayphysics.collision.shapes.AWPCylinderShape;
+	import awayphysics.collision.shapes.AWPSphereShape;
+	import awayphysics.collision.shapes.AWPStaticPlaneShape;
+	import awayphysics.debug.AWPDebugDraw;
+	import awayphysics.dynamics.AWPDynamicsWorld;
+	import awayphysics.dynamics.AWPRigidBody;
+	
+	import com.games.coindozer.ElementList;
+	import com.games.coindozer.Level;
 	import com.lhm3d.camera.*;
 	import com.lhm3d.fileobjectloaders.*;
 	import com.lhm3d.globals.*;
+	import com.lhm3d.jiglib.*;
 	import com.lhm3d.materialobjects.*;
 	import com.lhm3d.texturemanager.*;
 	import com.lhm3d.texturemanager.TextureLoader;
 	import com.lhm3d.viewtree.*;
-	import com.lhm3d.jiglib.*;
 	
 	import flash.display3D.textures.CubeTexture;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
 	import flash.text.TextField;
-	
-	import jiglib.geometry.*;
-	import jiglib.debug.Stats;
-	import jiglib.events.JCollisionEvent;
-	import jiglib.physics.*;
-	import jiglib.plugin.AbstractPhysics;
 	
 	
 	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#FFFFFF")]
@@ -27,6 +32,9 @@ package
 	
 	public class CoinDozer extends LHM3D
 	{
+
+		private var boxObjectData:WavefrontObjectLoader;		
+		private var boxObject:Base3DObject;		
 		
 		private var torusObjectData:WavefrontObjectLoader;		
 		private var torusObject:Base3DObject;
@@ -48,8 +56,14 @@ package
 		
 		// collision
 		
-		private var ball:RigidBody;
-		private var physics:AbstractPhysics;
+		private var physics:AWPDynamicsWorld;
+		
+		private var elementList:ElementList;
+		private var level:Level;
+		
+		// some logic
+		
+		private var upd:int = 0;
 		
 		
 		public function CoinDozer() 
@@ -59,7 +73,8 @@ package
 		
 		
 		public override function load():void {	
-			torusObjectData = new WavefrontObjectLoader("./data/torus.obj",0.5);	
+			torusObjectData = new WavefrontObjectLoader("./data/coindozer/coin.obj",100);
+			boxObjectData = new WavefrontObjectLoader("./data/coindozer/testcube.obj",500);
 			
 			torusTextureData = new TextureLoader("./data/base.png");
 			envmapTextureData = new TextureLoader("./data/envmap.png");
@@ -78,7 +93,7 @@ package
 			
 		
 			// 3d
-						
+
 			cubeTexture = TextureManager.addCubeTextureFromBMD(cubeTextureData[0].getBitmapData(),cubeTextureData[1].getBitmapData(),cubeTextureData[2].getBitmapData(),cubeTextureData[3].getBitmapData(),cubeTextureData[4].getBitmapData(),cubeTextureData[5].getBitmapData());
 			
 			torusTexture = TextureManager.addTextureFromBMD(torusTextureData.getBitmapData()); // add texture to manager and get refereence
@@ -88,48 +103,67 @@ package
 			torusObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 			torusObject2 = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 
+			boxObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
 			
 			//torusObject = new SimpleEnvMapped3DObject(torusTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
-		
 			// physics
 			
-			trace("holla");
+
+				
+			physics = AWPDynamicsWorld.getInstance();
+			physics.initWithDbvtBroadphase();
 			
-			physics = new AbstractPhysics(1);
-			
-			var jGround:JPlane = new JPlane(new Lhm3d4Mesh(torusObject2),new Vector3D(0, 1, 0));
-			jGround.y = -1.3;
-			jGround.movable = false;
-			physics.addBody(jGround);
-			
-			ball = new JSphere(new Lhm3d4Mesh(torusObject), 2);
-			physics.addBody(ball);
-			
-		
+			physics.gravity = new Vector3D(0,-50,0);
 			
 			
+			var groundShape : AWPStaticPlaneShape = new AWPStaticPlaneShape(new Vector3D(0, 1, 0));
+			
+			var groundRigidbody : AWPRigidBody = new AWPRigidBody(groundShape);
+			groundRigidbody.position =  new Vector3D(0,0,0);
+			groundRigidbody.friction = 0.2;
+			
+			physics.addRigidBody(groundRigidbody);
+			
+			elementList = new ElementList(physics);
+			level = new Level(physics,boxObject);
+			
+			
+			
+			
+			elementList.addElement("coin", new Vector3D(0,2000,0), 45,0,45, torusObject);
 		}
 		
 		public override function update():void {
 			rotate++;
 			Camera.updateFlyCamera();
 			
-			physics.step(1.0 / 60.0);
+			
+			upd++;
+			
+			if (upd % 60 == 0) {
+			
+				elementList.addElement("coin", new Vector3D(Math.random()*100-50,2000,Math.random()*100-50), Math.random()*180,Math.random()*180,Math.random()*180, torusObject);
+			}
+			
+			level.update();
+			
 		}
 		
 		
 		public override function render():void {
 			
-			Camera.setFlyCamera();
+			physics.step(1.0 / 60.0, 1, 1.0 / 60.0);
+			
+			//Camera.setFlyCamera();
+			Camera.setCamereXYZRot(new Vector3D(0,-5 * 200,20 * 200),-20,0,0);
 			
 			
-			ball.addWorldForce(new Vector3D(-10,0,0),ball.currentState.position);
+			//ball.addWorldForce(new Vector3D(-5,0,-5),ball.currentState.position);
 			
-			torusObject.renderWithPhysicsTransform();
-		
+			level.render();
+			elementList.render();
 			
 			
-			torusObject2.renderWithPhysicsTransform();
 			
 		}
 		

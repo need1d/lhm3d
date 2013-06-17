@@ -43,8 +43,8 @@ package com.lhm3d.globals
 			Camera.projectionTransform = new PerspectiveMatrix3D();
 			
 			var _aspect:Number = 4/3;
-			var _zNear:Number = 0.1;
-			var _zFar:Number = 1000;
+			var _zNear:Number = 1;
+			var _zFar:Number = 10000;
 			var _fov:Number = 45*Math.PI/180;
 			Camera.projectionTransform.perspectiveFieldOfViewLH(_fov, _aspect, _zNear, _zFar);
 			

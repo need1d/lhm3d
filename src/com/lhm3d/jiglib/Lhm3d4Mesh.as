@@ -28,7 +28,7 @@ package com.lhm3d.jiglib {
 		}
 		
 		public function get transform() : Matrix3D {
-			return _mesh.getPhysicsTransform();
+			return _transform;
 		}
 		
 		public function set transform(m : Matrix3D) : void {
@@ -36,7 +36,9 @@ package com.lhm3d.jiglib {
 		//	if (_translationOffset) _transform.appendTranslation(_translationOffset.x, _translationOffset.y, _translationOffset.z);
 		//	if (_scale) _transform.appendScale(_scale.x, _scale.y, _scale.z);
 		//	_transform.append(m);
-			_mesh.setPhysicsTransform(m);
+		//_mesh.setPhysicsTransform(m);
+			_transform = m;
+		
 		}
 		
 		public function get mesh() : Base3DObject {
@@ -50,10 +52,10 @@ package com.lhm3d.jiglib {
 			
 			var vts : Vector.<Number>=_mesh.getVertexLayer();
 			
-			var len : int = vts.length / 13;
+			var len : int = vts.length / 3;
 			
 			for (var i : uint = 0;i < len;i++) {
-				result.push(new Vector3D(vts[i * 13], vts[i * 13 + 1], vts[i * 13 + 2]));
+				result.push(new Vector3D(vts[i * 3], vts[i * 3 + 1], vts[i * 3 + 2]));
 			}
 			
 			
