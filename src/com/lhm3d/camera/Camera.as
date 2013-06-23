@@ -3,12 +3,11 @@ package com.lhm3d.camera
 	
 	import com.adobe.utils.PerspectiveMatrix3D;
 	import com.lhm3d.geometryhelpers.*;
+	import com.lhm3d.input.Key;
 	
 	import flash.geom.Matrix3D;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
-	
-	import com.lhm3d.input.Key;
 	
 	public class Camera
 	{
@@ -25,7 +24,7 @@ package com.lhm3d.camera
 		private static var xRot:Number = 0;
 		
 		
-		public static function updateFlyCamera():void {
+		public static function updateFlyCamera(_speed:Number = 1.0):void {
 
 			var _ram:Number = 1.0;
 			
@@ -37,18 +36,18 @@ package com.lhm3d.camera
 			if (Key.isDown(69)) xRot += _ram;
 			if (Key.isDown(68)) xRot-= _ram;
 			
-			if (Key.isDown(87)) flyPosition.y -= _am;
-			if (Key.isDown(83)) flyPosition.y += _am;
+			if (Key.isDown(87)) flyPosition.y -= _am*_speed;
+			if (Key.isDown(83)) flyPosition.y += _am*_speed;
 			
 			
 			if (Key.isDown(38)) {
-				flyPosition.x -= Math.cos(yRot * Math.PI/180 + Math.PI/2) * _am;
-				flyPosition.z -= Math.sin(yRot * Math.PI/180 + Math.PI/2) * _am;
+				flyPosition.x -= Math.cos(yRot * Math.PI/180 + Math.PI/2) * _am*_speed;
+				flyPosition.z -= Math.sin(yRot * Math.PI/180 + Math.PI/2) * _am*_speed;
 			} 
 			
 			if (Key.isDown(40)) {
-				flyPosition.x += Math.cos(yRot * Math.PI/180 + Math.PI/2) * _am;
-				flyPosition.z += Math.sin(yRot * Math.PI/180 + Math.PI/2) * _am;
+				flyPosition.x += Math.cos(yRot * Math.PI/180 + Math.PI/2) * _am*_speed;
+				flyPosition.z += Math.sin(yRot * Math.PI/180 + Math.PI/2) * _am*_speed;
 			} 
 			
 		

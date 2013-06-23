@@ -33,8 +33,13 @@ package
 	public class CoinDozer extends LHM3D
 	{
 
+		private var castleCollisionData:WavefrontObjectLoader;	
+		private var castleCollision:Base3DObject;		
+		
 		private var boxObjectData:WavefrontObjectLoader;		
-		private var boxObject:Base3DObject;		
+		private var boxObject:Base3DObject;	
+		
+		private var dummyCubeObject:Base3DObject;	
 		
 		private var torusObjectData:WavefrontObjectLoader;		
 		private var torusObject:Base3DObject;
@@ -75,6 +80,7 @@ package
 		public override function load():void {	
 			torusObjectData = new WavefrontObjectLoader("./data/coindozer/coin.obj",100);
 			boxObjectData = new WavefrontObjectLoader("./data/coindozer/testcube.obj",500);
+			castleCollisionData = new WavefrontObjectLoader("./data/coindozer/level.obj",100);
 			
 			torusTextureData = new TextureLoader("./data/base.png");
 			envmapTextureData = new TextureLoader("./data/envmap.png");
@@ -94,6 +100,8 @@ package
 		
 			// 3d
 
+			
+			
 			cubeTexture = TextureManager.addCubeTextureFromBMD(cubeTextureData[0].getBitmapData(),cubeTextureData[1].getBitmapData(),cubeTextureData[2].getBitmapData(),cubeTextureData[3].getBitmapData(),cubeTextureData[4].getBitmapData(),cubeTextureData[5].getBitmapData());
 			
 			torusTexture = TextureManager.addTextureFromBMD(torusTextureData.getBitmapData()); // add texture to manager and get refereence
@@ -104,6 +112,10 @@ package
 			torusObject2 = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 
 			boxObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
+			
+			dummyCubeObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
+			
+			castleCollision = new CLTexCubeEnvBumpFresnel3DObject(0.2,bumpTexture,cubeTexture,bumpTexture,castleCollisionData.getVertexLayer(),castleCollisionData.getNormalLayer(),castleCollisionData.getUVLayer(),castleCollisionData.getIndexLayer()); 
 			
 			//torusObject = new SimpleEnvMapped3DObject(torusTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 			// physics
@@ -116,16 +128,8 @@ package
 			physics.gravity = new Vector3D(0,-50,0);
 			
 			
-			var groundShape : AWPStaticPlaneShape = new AWPStaticPlaneShape(new Vector3D(0, 1, 0));
-			
-			var groundRigidbody : AWPRigidBody = new AWPRigidBody(groundShape);
-			groundRigidbody.position =  new Vector3D(0,0,0);
-			groundRigidbody.friction = 0.2;
-			
-			physics.addRigidBody(groundRigidbody);
-			
 			elementList = new ElementList(physics);
-			level = new Level(physics,boxObject);
+			level = new Level(physics,   boxObject, castleCollision, dummyCubeObject);
 			
 			
 			
@@ -135,27 +139,27 @@ package
 		
 		public override function update():void {
 			rotate++;
-			Camera.updateFlyCamera();
+			Camera.updateFlyCamera(100);
 			
 			
 			upd++;
 			
 			if (upd % 60 == 0) {
 			
-				elementList.addElement("coin", new Vector3D(Math.random()*100-50,2000,Math.random()*100-50), Math.random()*180,Math.random()*180,Math.random()*180, torusObject);
+				elementList.addElement("coin", new Vector3D(Math.random()*1000-500,2000,Math.random()*100-50), Math.random()*180,Math.random()*180,Math.random()*180, torusObject);
 			}
 			
-			level.update();
+			
 			
 		}
 		
 		
 		public override function render():void {
 			
-			physics.step(1.0 / 60.0, 1, 1.0 / 60.0);
 			
-			//Camera.setFlyCamera();
-			Camera.setCamereXYZRot(new Vector3D(0,-5 * 200,20 * 200),-20,0,0);
+			
+			Camera.setFlyCamera();
+			//Camera.setCamereXYZRot(new Vector3D(0,-5 * 200,20 * 200),-20,0,0);
 			
 			
 			//ball.addWorldForce(new Vector3D(-5,0,-5),ball.currentState.position);
@@ -163,7 +167,8 @@ package
 			level.render();
 			elementList.render();
 			
-			
+			level.update();
+			physics.step(1.0 / 60.0, 1, 1.0 / 60.0);
 			
 		}
 		
