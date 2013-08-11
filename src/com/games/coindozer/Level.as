@@ -54,8 +54,9 @@ package com.games.coindozer
 			boxRigidBody.friction = 0.0;
 			boxRigidBody.ccdSweptSphereRadius = 0.5;
 			boxRigidBody.ccdMotionThreshold = 0;
-			boxRigidBody.position = new Vector3D(0,500,500);
+			boxRigidBody.position = new Vector3D(0,100,500);
 			
+			physics.addRigidBody(boxRigidBody);
 			
 			// castle object
 			
@@ -125,8 +126,22 @@ package com.games.coindozer
 			
 			for (var i:int = 0; i < cubeMatrixes.length; i++) {
 				var _bShape : AWPBoxShape = new AWPBoxShape(1000,1000,1000);
-				var _cubeRGB: AWPRigidBody = new AWPRigidBody(_bShape,null,0);
-				_cubeRGB.friction = 0.07;
+				var _cubeRGB: AWPRigidBody = new AWPRigidBody(_bShape, null, 0);
+				
+				_cubeRGB.ccdSweptSphereRadius = 0.001;
+				//list[list.length-1].rigidBody.angularFactor = 0.2;
+				_cubeRGB.angularDamping =0.8;
+				_cubeRGB.ccdMotionThreshold = 0.001;
+				_cubeRGB.restitution = 0.001;
+				
+				if (i == 0) {
+					_cubeRGB.friction = 0.3;
+			
+				} else {
+					_cubeRGB.friction = 0.3;
+				}
+			
+			
 				_cubeRGB.transform = cubeMatrixes[i];
 				physics.addRigidBody(_cubeRGB);
 			}
@@ -139,15 +154,15 @@ package com.games.coindozer
 			upd++;
 			//boxRigidBody.position = new Vector3D(0,500,500 + Math.sin(upd / 30) * 500);
 			boxRigidBody.x = 0;
-			boxRigidBody.y = 400;
-			boxRigidBody.z = Math.sin(upd / 30) * 800;
+			boxRigidBody.y = -330;
+			boxRigidBody.z = Math.sin(upd / 50) * 250 + 170;
 			
 		}
 		
 		public function render() : void {
 			
 			// slider object
-			//sliderObject.renderWithMatrix(boxRigidBody.transform);
+			sliderObject.renderWithMatrix(boxRigidBody.transform);
 			
 			// castle collision
 			castleObject.renderWithMatrix(castleMatrix);

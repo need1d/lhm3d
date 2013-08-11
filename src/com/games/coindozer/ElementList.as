@@ -24,7 +24,7 @@ package com.games.coindozer
 		
 		private var physics:AWPDynamicsWorld;
 		
-		private var coinShape : AWPCylinderShape = new AWPCylinderShape(100,40);
+		private var coinShape : AWPCylinderShape = new AWPCylinderShape(100,50);
 		
 		public function ElementList(_physics:AWPDynamicsWorld) : void
 		{
@@ -42,16 +42,18 @@ package com.games.coindozer
 				
 				list.push(new ElementEntity());
 				list[list.length-1].object = _object3d;
-				list[list.length-1].rigidBody = new AWPRigidBody(coinShape,null,1000.9);	
-				list[list.length-1].rigidBody.friction = 2;
-				list[list.length-1].rigidBody.ccdSweptSphereRadius = 0.5;
-				list[list.length-1].rigidBody.ccdMotionThreshold = 1;
+				list[list.length-1].rigidBody = new AWPRigidBody(coinShape,null, 25);	
+				list[list.length-1].rigidBody.friction = 0.3;
+				list[list.length-1].rigidBody.ccdSweptSphereRadius = 0.001;
+				list[list.length-1].rigidBody.angularDamping =0.99;
+				list[list.length-1].rigidBody.ccdMotionThreshold = 0.001;
+				list[list.length-1].rigidBody.restitution = 0.001;
+				
 				list[list.length-1].rigidBody.gravity = new Vector3D(0,10,0);
 				
 			}
 			
 			if (_typeFound) {
-
 			
 				physics.addRigidBody(list[list.length-1].rigidBody);
 				

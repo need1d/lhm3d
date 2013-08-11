@@ -26,7 +26,7 @@ package
 	import flash.text.TextField;
 	
 	
-	[SWF(width="1024", height="768", frameRate="60", backgroundColor="#FFFFFF")]
+	[SWF(width="1024", height="768", frameRate="25", backgroundColor="#FFFFFF")]
 	
 	
 	
@@ -100,8 +100,6 @@ package
 		
 			// 3d
 
-			
-			
 			cubeTexture = TextureManager.addCubeTextureFromBMD(cubeTextureData[0].getBitmapData(),cubeTextureData[1].getBitmapData(),cubeTextureData[2].getBitmapData(),cubeTextureData[3].getBitmapData(),cubeTextureData[4].getBitmapData(),cubeTextureData[5].getBitmapData());
 			
 			torusTexture = TextureManager.addTextureFromBMD(torusTextureData.getBitmapData()); // add texture to manager and get refereence
@@ -117,15 +115,12 @@ package
 			
 			castleCollision = new CLTexCubeEnvBumpFresnel3DObject(0.2,bumpTexture,cubeTexture,bumpTexture,castleCollisionData.getVertexLayer(),castleCollisionData.getNormalLayer(),castleCollisionData.getUVLayer(),castleCollisionData.getIndexLayer()); 
 			
-			//torusObject = new SimpleEnvMapped3DObject(torusTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
-			// physics
-			
 
 				
 			physics = AWPDynamicsWorld.getInstance();
 			physics.initWithDbvtBroadphase();
 			
-			physics.gravity = new Vector3D(0,-50,0);
+			physics.gravity = new Vector3D(0,-60,0);
 			
 			
 			elementList = new ElementList(physics);
@@ -133,8 +128,6 @@ package
 			
 			
 			
-			
-			elementList.addElement("coin", new Vector3D(0,2000,0), 45,0,45, torusObject);
 		}
 		
 		public override function update():void {
@@ -144,9 +137,9 @@ package
 			
 			upd++;
 			
-			if (upd % 60 == 0) {
+			if (upd % 120 == 0) {
 			
-				elementList.addElement("coin", new Vector3D(Math.random()*1000-500,2000,Math.random()*100-50), Math.random()*180,Math.random()*180,Math.random()*180, torusObject);
+				elementList.addElement("coin", new Vector3D(Math.random()*1000-500,500,Math.random()*100-50), 0,Math.random()*180,0, torusObject);
 			}
 			
 			
@@ -168,7 +161,8 @@ package
 			elementList.render();
 			
 			level.update();
-			physics.step(1.0 / 60.0, 1, 1.0 / 60.0);
+			physics.step(1.0 / 25.0, 1, 1.0 / 60.0);
+			//physics.step(1 / 25.0, 10);
 			
 		}
 		
