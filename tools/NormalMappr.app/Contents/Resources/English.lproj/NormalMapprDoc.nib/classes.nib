@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {CLASS = AppDelegate; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = ControlPanelView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = ImageView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {
+            ACTIONS = {export = id; }; 
+            CLASS = NormalMapprDoc; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                clampModePopup = NSPopUpButton; 
+                flatteningSlider = NSSlider; 
+                flatteningValueField = NSTextField; 
+                imageView = ImageView; 
+                outputDimensionsForm = NSForm; 
+                sampleSizePopup = NSPopUpButton; 
+                savePanelDialog = NSView; 
+                savePanelQualityControls = NSBox; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }
+    ); 
+    IBVersion = 1; 
+}

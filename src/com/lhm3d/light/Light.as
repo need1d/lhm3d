@@ -26,15 +26,15 @@ package com.lhm3d.light
 		
 		public function Light()
 		{
-			setDirection(1,0,0);
+			setDirection(-1,0,-1);
 			
-			setBaseColor(1.0, 1.0, 1.0);
+			setBaseColor(0.9, 0.9, 0.9);
 			
 			setHaloColor(0.1, 0.5, 0.0);
 			
-			setColorAdditive(1.0, 1.0, 1.0, 0.0);
+			setColorAdditive(1.0, 1.0, 1.0, 0.4);
 			
-			setColorAmbient(1.0, 1.0, 1.0, 0.9);
+			setColorAmbient(0.0, 0.0, 0.0, 0.2);
 		}
 		
 		

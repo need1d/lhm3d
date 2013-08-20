@@ -27,8 +27,8 @@ package
 		private var torusTextureData:TextureLoader;
 		private var torusTexture:int;
 		
-		private var envmapTextureData:TextureLoader;
-		private var envmapTexture:int;
+		//private var envmapTextureData:TextureLoader;
+		//private var envmapTexture:int;
 		
 		private var bumpTextureData:TextureLoader;
 		private var bumpTexture:int;
@@ -46,18 +46,18 @@ package
 		
 		
 		public override function load():void {	
-			torusObjectData = new WavefrontObjectLoader("./data/torus.obj",1);	
+			torusObjectData = new WavefrontObjectLoader("./data/demo/logo.obj",1);	
 			
-			torusTextureData = new TextureLoader("./data/base.png");
-			envmapTextureData = new TextureLoader("./data/envmap.png");
+			torusTextureData = new TextureLoader("./data/demo/logo.jpg");
+			//envmapTextureData = new TextureLoader("./data/envmap.png");
 			bumpTextureData = new TextureLoader("./data/bump.png");
 			
-			cubeTextureData.push(new TextureLoader("./data/xleft.png"));
-			cubeTextureData.push(new TextureLoader("./data/xright.png"));
-			cubeTextureData.push(new TextureLoader("./data/yup.png"));
-			cubeTextureData.push(new TextureLoader("./data/ydown.png"));
-			cubeTextureData.push(new TextureLoader("./data/zback.png"));
-			cubeTextureData.push(new TextureLoader("./data/zfront.png"));
+			cubeTextureData.push(new TextureLoader("./data/demo/xleft.png"));
+			cubeTextureData.push(new TextureLoader("./data/demo/xright.png"));
+			cubeTextureData.push(new TextureLoader("./data/demo/yup.png"));
+			cubeTextureData.push(new TextureLoader("./data/demo/ydown.png"));
+			cubeTextureData.push(new TextureLoader("./data/demo/zback.png"));
+			cubeTextureData.push(new TextureLoader("./data/demo/zfront.png"));
 			
 		}
 		
@@ -68,10 +68,10 @@ package
 			cubeTexture = TextureManager.addCubeTextureFromBMD(cubeTextureData[0].getBitmapData(),cubeTextureData[1].getBitmapData(),cubeTextureData[2].getBitmapData(),cubeTextureData[3].getBitmapData(),cubeTextureData[4].getBitmapData(),cubeTextureData[5].getBitmapData());
 			
 			torusTexture = TextureManager.addTextureFromBMD(torusTextureData.getBitmapData()); // add texture to manager and get refereence
-			envmapTexture = TextureManager.addTextureFromBMD(envmapTextureData.getBitmapData()); // add texture to manager and get refereence
+			//envmapTexture = TextureManager.addTextureFromBMD(envmapTextureData.getBitmapData()); // add texture to manager and get refereence
 			bumpTexture = TextureManager.addTextureFromBMD(bumpTextureData.getBitmapData()); // add texture to manager and get refereence	
 			
-			torusObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
+			torusObject = new CLTexCubeEnvBumpFresnel3DObject(0.1,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 			//torusObject = new SimpleEnvMapped3DObject(torusTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 	
 		}
@@ -88,14 +88,11 @@ package
 			
 			var _mat:Matrix3D = new Matrix3D();
 			
-			_mat.appendRotation(90, new Vector3D(1,0,0));
+			_mat.appendRotation(rotate/1.5, new Vector3D(0,1,0));
 			
-			
-			_mat.appendRotation(rotate/1.2, new Vector3D(0,1,0));
-			_mat.appendRotation(rotate/1.3, new Vector3D(0,0,1));
 		
 			
-			_mat.appendTranslation(0,0,9);		
+			_mat.appendTranslation(0,0,5);		
 			
 			torusObject.renderWithMatrix(_mat);
 			
