@@ -6,6 +6,7 @@ package com.lhm3d.fileobjectloaders
 	public class BaseObjectLoader
 	{
 		protected var scale:Number;
+		protected var scaleUV:Number;
 		
 		protected var tangentLayer:Vector.<Number> = new Vector.<Number>();
 		protected var biTangentLayer:Vector.<Number> = new Vector.<Number>();

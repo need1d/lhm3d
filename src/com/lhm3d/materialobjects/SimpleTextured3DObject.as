@@ -31,7 +31,7 @@ package com.lhm3d.materialobjects
 												  					 _uvLayer:Vector.<Number>,
 																	 _indexLayer:Vector.<uint>)
 		{
-			super();
+			super(_vertexLayer,_indexLayer);
 
 			textureIndex = _textureIndex;
 			var vertices:Vector.<Number> = new Vector.<Number>();

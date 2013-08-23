@@ -81,7 +81,9 @@ package com.lhm3d.materialobjects
 		
 		public function getBoundingBox():BoundingBox {return boundingBox;}
 		
-		
+		public function setLight(_light:Light) : void {
+			light = _light;
+		}
 		
 		
 		public function renderAtPosition(_x:Number, _y:Number, _z:Number):void {

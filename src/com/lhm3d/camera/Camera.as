@@ -78,10 +78,12 @@ package com.lhm3d.camera
 			viewMatrix = new Matrix3D;
 			
 			viewMatrix.appendTranslation(cameraPosition.x,cameraPosition.y,cameraPosition.z);
-			viewMatrix.appendRotation(_rotX,new Vector3D(1,0,0));
-			viewMatrix.appendRotation(_rotY,new Vector3D(0,1,0));
+
+			
 			viewMatrix.appendRotation(_rotZ,new Vector3D(0,0,1));
-		
+			viewMatrix.appendRotation(_rotY,new Vector3D(0,1,0));
+			viewMatrix.appendRotation(_rotX,new Vector3D(1,0,0));
+			
 			CalculateFrustum();
 		} 
 		

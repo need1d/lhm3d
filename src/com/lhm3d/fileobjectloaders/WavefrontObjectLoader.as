@@ -22,12 +22,12 @@ package com.lhm3d.fileobjectloaders
 		private static const NOUVFACE:RegExp = /^f\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)/;
 	
 		
-		public function WavefrontObjectLoader(_filename:String, _scale:Number = 1):void
+		public function WavefrontObjectLoader(_filename:String, _scale:Number = 1, _scaleUV:Number = 1):void
 		{
 			super();
 			
 			Globals.objectsToLoad++;
-			
+			scaleUV = _scaleUV;	
 			scale = _scale;
 			file = _filename;
 			loadWavefront(_filename);
@@ -71,7 +71,7 @@ package com.lhm3d.fileobjectloaders
 				}
 			    
 				if ((_params = _line.match(T_VERTEX)) != null) {
-					_tmpUVLayer.push(Number(_params[1]), 1 - Number(_params[2]));
+					_tmpUVLayer.push(Number(_params[1]) * scaleUV, 1 - Number(_params[2]) * scaleUV);
 				}
 				
 				if ((_params = _line.match(NORMAL_VERTEX)) != null) {
