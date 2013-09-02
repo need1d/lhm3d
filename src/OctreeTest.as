@@ -60,7 +60,7 @@ package
 			
 			landObjectData.doSplit(10); // Split the land obj to smaller pieces (longest edge is splittet into 10 parts)
 			for (var j:int = 0; j < landObjectData.getSplitPartLength(); j++) {
-				landSplittedObjects.push(new CLTex3DObject(landTexture,landObjectData.getSplitVertexLayer(j),landObjectData.getSplitNormalLayer(j),landObjectData.getSplitUVLayer(j),landObjectData.getSplitIndexLayer(j))); //generate a simple textured object for each land part
+				landSplittedObjects.push(new Tex3DObject(landTexture,landObjectData.getSplitVertexLayer(j),landObjectData.getSplitNormalLayer(j),landObjectData.getSplitUVLayer(j),landObjectData.getSplitIndexLayer(j))); //generate a simple textured object for each land part
 				var _ref:int = ViewTree.submitObjectToContainer(landSplittedObjects[j]); // submit each part-object to the view-container and get the reference
 			
 				ViewTree.addObjectAtPosRotScale(_ref,0,-5,0,0,0,0,1); // position a little bit below camera (y = -5)

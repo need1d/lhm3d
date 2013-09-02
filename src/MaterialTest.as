@@ -5,6 +5,7 @@ package
 	import com.lhm3d.globals.*;
 	import com.lhm3d.light.Light;
 	import com.lhm3d.materialobjects.*;
+	import com.lhm3d.stats.Stats;
 	import com.lhm3d.texturemanager.*;
 	import com.lhm3d.texturemanager.TextureLoader;
 	import com.lhm3d.viewtree.*;
@@ -29,9 +30,25 @@ package
 		private var cylinderTextureData:TextureLoader;
 		private var cylinderTexture:int;
 		
+		
+		// crystal
+		private var crystalObjectData:WavefrontObjectLoader;		
+		private var crystalObject:Base3DObject;
+		
+		private var crystalTextureData:TextureLoader;
+		private var crystalTexture:int;
+		
+		
+		// ring
+		private var ringObjectData:WavefrontObjectLoader;		
+		private var ringObject:Base3DObject;
+		
+		private var ringTextureData:TextureLoader;
+		private var ringTexture:int;
+		
 		// plane
 		private var planeObjectData:WavefrontObjectLoader;		
-		private var planeObject:CLTex3DWater;
+		private var planeObject:CLTex3DWaterObject;
 		
 		private var waterBumpTextureData:TextureLoader;
 		private var waterBumpTexture:int;
@@ -76,10 +93,18 @@ package
 		
 		public override function load():void {
 			
+			//Globals.context3D.enableErrorChecking;
+			
 			planeObjectData = new WavefrontObjectLoader("./data/demo/lake.obj",9, 2.8);
-			cylinderObjectData = new WavefrontObjectLoader("./data/demo/cylinder.obj");
-		
+			
+			cylinderObjectData = new WavefrontObjectLoader("./data/demo/cylinder.obj",9);
 			cylinderTextureData = new TextureLoader("./data/demo/sky.png");
+			
+			crystalObjectData = new WavefrontObjectLoader("./data/demo/crystal.obj",0.45);
+			crystalTextureData = new TextureLoader("./data/demo/blank.png");
+			
+			ringObjectData = new WavefrontObjectLoader("./data/demo/ring.obj",4);
+			ringTextureData = new TextureLoader("./data/demo/ring.png");
 			
 			waterBumpTextureData = new TextureLoader("./data/demo/waterbump2.png");
 			
@@ -109,35 +134,42 @@ package
 		}
 		
 		public override function loaded():void {
-
+			
 			cube2Texture = TextureManager.addCubeTextureFromBMD(cube2TextureData[0].getBitmapData(),cube2TextureData[1].getBitmapData(),cube2TextureData[2].getBitmapData(),cube2TextureData[3].getBitmapData(),cube2TextureData[4].getBitmapData(),cube2TextureData[5].getBitmapData());
-
 			
 			cubeTexture = TextureManager.addCubeTextureFromBMD(cubeTextureData[0].getBitmapData(),cubeTextureData[1].getBitmapData(),cubeTextureData[2].getBitmapData(),cubeTextureData[3].getBitmapData(),cubeTextureData[4].getBitmapData(),cubeTextureData[5].getBitmapData());
-			waterBumpTexture = TextureManager.addTextureFromBMD(waterBumpTextureData.getBitmapData());
-			
+			waterBumpTexture = TextureManager.addTextureFromBMD(waterBumpTextureData.getBitmapData());			
 			cylinderTexture = TextureManager.addTextureFromBMD(cylinderTextureData.getBitmapData());
-			
-			
-			torusTexture = TextureManager.addTextureFromBMD(torusTextureData.getBitmapData()); // add texture to manager and get refereence
-			bumpTexture = TextureManager.addTextureFromBMD(bumpTextureData.getBitmapData()); // add texture to manager and get refereence	
-			torusObject = new CLTexCubeEnvBumpFresnel3DObject(0.5,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
-
-			
+			crystalTexture = TextureManager.addTextureFromBMD(crystalTextureData.getBitmapData());
+			ringTexture = TextureManager.addTextureFromBMD(ringTextureData.getBitmapData());
 			
 			eisbergTexture = TextureManager.addTextureFromBMD(eisbergTextureData.getBitmapData()); // add texture to manager and get refereence
 			eisbergBumpTexture = TextureManager.addTextureFromBMD(eisbergBumpTextureData.getBitmapData()); // add texture to manager and get refereence
-			eisbergObject = new CLTexCubeEnvBumpFresnel3DObject(0.5,eisbergTexture,cubeTexture,eisbergBumpTexture,eisbergObjectData.getVertexLayer(),eisbergObjectData.getNormalLayer(),eisbergObjectData.getUVLayer(),eisbergObjectData.getIndexLayer()); // generate env / bump mapped lighting material
+			
+			torusTexture = TextureManager.addTextureFromBMD(torusTextureData.getBitmapData()); // add texture to manager and get refereence
+			bumpTexture = TextureManager.addTextureFromBMD(bumpTextureData.getBitmapData()); // add texture to manager and get refereence	
+			
+			
+			torusObject = MaterialFactory.buildCLTexCubeEnvBumpFresnelObject(0.5,torusTexture,cubeTexture,bumpTexture,torusObjectData);
+			
+			eisbergObject = MaterialFactory.buildCLTexCubeEnvBumpFresnelObject(0.5, eisbergTexture, cubeTexture, eisbergBumpTexture, eisbergObjectData);	
 			var lightEisberg:Light = new Light();
 			lightEisberg.setBaseColor(0.8,0.8,0.8);
 			eisbergObject.setLight(lightEisberg);
 			
+			crystalObject = MaterialFactory.buildCLTexCubeEnvObject(0.4, crystalTexture, cubeTexture, crystalObjectData);			
+			var lightCrystel:Light = new Light();
+			lightCrystel.setBaseColor(0.2,0.5,0.8);
+			crystalObject.setLight(lightCrystel);
 			
-			cylinderObject = new SimpleTextured3DObject(eisbergTexture,cylinderObjectData.getVertexLayer(),cylinderObjectData.getUVLayer(),cylinderObjectData.getIndexLayer());
 
+			cylinderObject = MaterialFactory.buildTexObject(cylinderTexture,cylinderObjectData);
 			
-			planeObject = new CLTex3DWater(1.1, 0.1,  0.3, 0.3, 0.4, waterBumpTexture,waterBumpTexture, cube2Texture, planeObjectData.getVertexLayer(), planeObjectData.getNormalLayer(), planeObjectData.getUVLayer(),planeObjectData.getIndexLayer());
+			ringObject = MaterialFactory.buildTexObject(ringTexture, ringObjectData);
 			
+			planeObject = MaterialFactory.buildCLTex3DWater(1.1, 0.1,  0.3, 0.3, 0.4,waterBumpTexture, waterBumpTexture, cube2Texture, planeObjectData);
+			
+			addChild(new Stats());
 		}
 		
 		public override function update():void {
@@ -151,10 +183,13 @@ package
 		
 		public override function render():void {
 			
+			
 			//Camera.setFlyCamera();
 			
 			// render the logo
 			var _mat:Matrix3D = new Matrix3D();
+			
+			
 			_mat.appendTranslation(0,1,0);
 			_mat.appendRotation(-rotate* 0.2, new Vector3D(0,1,0));
 			torusObject.renderWithMatrix(_mat);
@@ -176,11 +211,27 @@ package
 				
 			}
 			
-			//lake
+	
 			_mat.identity();
-			_mat.appendRotation(rotate* 0.2, new Vector3D(0,1,0));
+			_mat.appendTranslation(4.5,0,-2);
+			crystalObject.renderWithMatrix(_mat);
+
+			_mat.identity();
+			_mat.appendTranslation(-5.5,0,4);
+			crystalObject.renderWithMatrix(_mat);
+
 			
+			
+			_mat.identity();			
 			cylinderObject.renderWithMatrix(_mat);
+			
+			
+			_mat.identity();
+			_mat.appendScale(1,0.4,1);
+			ringObject.renderWithMatrix(_mat);
+						
+			
+			_mat.identity();
 			planeObject.renderWithMatrix(_mat);
 			
 		}

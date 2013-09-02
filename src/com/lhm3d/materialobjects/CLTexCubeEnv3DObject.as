@@ -35,7 +35,7 @@ package com.lhm3d.materialobjects
 										 	_normalLayer:Vector.<Number>,_uvLayer:Vector.<Number>,
 										 	_indexLayer:Vector.<uint>)
 		{
-			super(_vertexLayer);
+			super(_vertexLayer,_indexLayer);
 			
 			
 			envAmount = _envAmount;
@@ -155,6 +155,13 @@ package com.lhm3d.materialobjects
 			
 			Globals.context3D.drawTriangles(indexbuffer);
 			
+			// cleanup
+			Globals.context3D.setVertexBufferAt(0, null);
+			Globals.context3D.setVertexBufferAt(1, null);
+			Globals.context3D.setVertexBufferAt(2, null);
+			Globals.context3D.setTextureAt(0, null);
+			Globals.context3D.setTextureAt(1, null);
+	
 		}
 		
 	}

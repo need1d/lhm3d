@@ -24,7 +24,7 @@ package com.lhm3d.materialobjects
 	
 	
 	
-	public class CLTex3DWater extends Base3DObject
+	public class CLTex3DWaterObject extends Base3DObject
 	{
 		
 		private var textureWave1Index:int;
@@ -41,7 +41,7 @@ package com.lhm3d.materialobjects
 		private var texCycleAmount:Number = 0;
 		
 		
-		public function CLTex3DWater(_envAmount:Number, _alphaAmount:Number, _r:Number, _g:Number, _b:Number, _textureWave1Index:int, _textureWave2Index:int, _cubeEnvTexIndex:int,  _vertexLayer:Vector.<Number>, 
+		public function CLTex3DWaterObject(_envAmount:Number, _alphaAmount:Number, _r:Number, _g:Number, _b:Number, _textureWave1Index:int, _textureWave2Index:int, _cubeEnvTexIndex:int,  _vertexLayer:Vector.<Number>, 
 														_normalLayer:Vector.<Number>,_uvLayer:Vector.<Number>, _indexLayer:Vector.<uint>)
 		{
 			super(_vertexLayer,_indexLayer);
@@ -164,9 +164,17 @@ package com.lhm3d.materialobjects
 			
 		
 			Globals.context3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-			//Globals.context3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE);
 			Globals.context3D.drawTriangles(indexbuffer);
 			Globals.context3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO);
+			
+			// cleanup
+			Globals.context3D.setVertexBufferAt(0, null);
+			Globals.context3D.setVertexBufferAt(1, null);
+			Globals.context3D.setVertexBufferAt(2, null);
+			Globals.context3D.setTextureAt(0, null);
+			Globals.context3D.setTextureAt(1, null);
+			Globals.context3D.setTextureAt(2, null);
+			
 			
 		}
 		

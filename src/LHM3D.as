@@ -91,14 +91,7 @@ package
 			
 		public function loaded():void { // zum überschreiben
 			
-			// Test Materials
-			//object = new CLTexHalo3DObject(3,0.5,texture,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
-			//object = new CLTexEnvHalo3DObject(1,0.8,0.1,texture,envMap,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
-			//object = new CLTexEnvBumpHalo3DObject(3,0.1,0.8,texture,envMap,bumpMap,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
-			//object = new CLTex3DObject(texture,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
-			//object = new CLTexEnv3DObject(0.1, texture,envMap,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
-			//object = new CLTexEnvBump3DObject(2.0,texture,envMap,bumpMap,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
-			//object = new CLTexEnvBumpFresnel3DObject(2.1,texture,envMap,bumpMap,objLoader.getVertexLayer(),objLoader.getNormalLayer(),objLoader.getUVLayer(),objLoader.getIndexLayer());
+			
 		}
 		
 		private function startUpdateRender():void {
@@ -122,7 +115,7 @@ package
 			if ( !Globals.context3D ) 
 			return;
 			
-			Globals.context3D.clear(0.0,0.0,1.0);
+			Globals.context3D.clear(1.0,1.0,1.0);
 			Globals.renderedObjectCount = 0;
 			
 			

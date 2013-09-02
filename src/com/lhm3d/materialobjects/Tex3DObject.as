@@ -2,6 +2,9 @@ package com.lhm3d.materialobjects
 {
 	
 	import com.adobe.utils.AGALMiniAssembler;
+	import com.lhm3d.camera.*;
+	import com.lhm3d.globals.Globals;
+	import com.lhm3d.texturemanager.TextureManager;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -17,22 +20,18 @@ package com.lhm3d.materialobjects
 	import flash.geom.Matrix3D;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
-	import com.lhm3d.globals.Globals;
-	import com.lhm3d.texturemanager.TextureManager;
-	import com.lhm3d.camera.*;
 	
 	
-	public class SimpleTextured3DObject extends Base3DObject
+	
+	public class Tex3DObject extends Base3DObject
 	{
 		
 		private var textureIndex:int;
 		
-		public function SimpleTextured3DObject(_textureIndex:int, _vertexLayer:Vector.<Number>, 
-												  					 _uvLayer:Vector.<Number>,
-																	 _indexLayer:Vector.<uint>)
+		public function Tex3DObject(_textureIndex:int, _vertexLayer:Vector.<Number>, _uvLayer:Vector.<Number>, _indexLayer:Vector.<uint>)
 		{
 			super(_vertexLayer,_indexLayer);
-
+			
 			textureIndex = _textureIndex;
 			var vertices:Vector.<Number> = new Vector.<Number>();
 			
@@ -40,7 +39,7 @@ package com.lhm3d.materialobjects
 				vertices.push(_vertexLayer[i*3],_vertexLayer[i*3+1],_vertexLayer[i*3+2],_uvLayer[i*2],_uvLayer[i*2+1]);
 			}
 			
-
+			
 			vertexbuffer = Globals.context3D.createVertexBuffer(_vertexLayer.length / 3, 5);
 			vertexbuffer.uploadFromVector(vertices, 0, vertices.length / 5);		
 			
@@ -62,28 +61,37 @@ package com.lhm3d.materialobjects
 			
 			program = Globals.context3D.createProgram();
 			program.upload( vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
-
+			
 			
 		}
 		
 		
 		public override function renderWithMatrix(_mat:Matrix3D):void  {
+			
 			var _m:Matrix3D = _mat.clone();
 			
 			_m.append(Camera.viewMatrix);
 			_m.append(Camera.projectionTransform);
 			
-			// vertex position to attribute register 0
-			Globals.context3D.setVertexBufferAt (0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-			// UV to attribute register 1
-			Globals.context3D.setVertexBufferAt(1, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
-			// assign texture to texture sampler 0
-			Globals.context3D.setTextureAt(0, TextureManager.textures[textureIndex].texture);				
-			// assign shader program
 			Globals.context3D.setProgram(program);
+			
+
+			Globals.context3D.setVertexBufferAt (0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+
+			Globals.context3D.setVertexBufferAt(1, vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
+
+			Globals.context3D.setTextureAt(0, TextureManager.textures[textureIndex].texture);
+
+			
 			
 			Globals.context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, _m, true);
 			Globals.context3D.drawTriangles(indexbuffer);
+			
+			
+			// cleanup
+			Globals.context3D.setVertexBufferAt(0, null);
+			Globals.context3D.setVertexBufferAt(1, null);
+			Globals.context3D.setTextureAt(0, null);
 			
 		}
 		
