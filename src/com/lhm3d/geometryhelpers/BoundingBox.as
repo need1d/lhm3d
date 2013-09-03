@@ -23,6 +23,10 @@ package com.lhm3d.geometryhelpers
 				
 		}
 		
+		public function traceOut(): void {
+			for (var i:int = 0; i < bounds.length; i++) trace("X:",bounds[i].x,"Y:",bounds[i].y, "Z:",bounds[i].z);
+		}
+		
 		public function getBounds():Vector.<Vector3D> {return bounds;}
 		public function getAaMin():Vector3D {return bounds[0];}
 		public function getAaMax():Vector3D {return bounds[6];}
@@ -55,13 +59,24 @@ package com.lhm3d.geometryhelpers
 				
 		}
 		
+		public function pointInSelfNonAaBB(_p:Vector3D):Boolean {
+		
+			var _r1:Boolean = HelpMath.pointSideTriangle(_p, bounds[0], bounds[1], bounds[2]);
+			var _r2:Boolean = HelpMath.pointSideTriangle(_p, bounds[1], bounds[5], bounds[6]);
+			var _r3:Boolean = HelpMath.pointSideTriangle(_p, bounds[5], bounds[4], bounds[7]);
+			var _r4:Boolean = HelpMath.pointSideTriangle(_p, bounds[4], bounds[0], bounds[3]);
+			var _r5:Boolean = HelpMath.pointSideTriangle(_p, bounds[3], bounds[2], bounds[6]);
+			var _r6:Boolean = HelpMath.pointSideTriangle(_p, bounds[5], bounds[0], bounds[4]);
+			
+			return ((_r1==_r2)&&(_r1==_r3)&&(_r1==_r4)&&(_r1==_r5)&&(_r1==_r6));
+		}
+		
 		
 		public function icludesOtherNonAaBB(_obb:BoundingBox):Boolean {
-
 			for (var i:int = 0; i < 8; i++) {
 				if (pointInSelfAaBB(_obb.bounds[i])) return true;
+				if (_obb.pointInSelfNonAaBB(bounds[i])) return true;
 			}
-			
 			return false;		
 		}
 		

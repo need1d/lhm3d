@@ -3,6 +3,7 @@ package com.lhm3d.texturemanager
 	
 	import com.lhm3d.globals.Globals;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display3D.Context3DTextureFormat;
 	import flash.display3D.textures.CubeTexture;
@@ -14,9 +15,29 @@ package com.lhm3d.texturemanager
 		public static var textures:Vector.<TextureManagerEntity> = new Vector.<TextureManagerEntity>();
 		
 		public static var cubeTextures:Vector.<CubeTextureManagerEntity> = new Vector.<CubeTextureManagerEntity>();
-			
+		
+		private static var dummyTexture:BitmapData;
+		
 		public static function init():void {
+			
+			createDummyTexture();
 		}
+		
+		
+		private static function createDummyTexture() : void  {
+			var _cols:Vector.<uint> = new Vector.<uint>();
+			_cols.push(0xff0000,0xffff00,0x00ffff,0xff00ff,0x00ff00,0x0000ff,0x77ff00,0xff0077,0x777777,0xffffff,0x7700ff,0xffee11,0x112233,0xaa22ee,0x000000);
+			dummyTexture = new BitmapData(256,256,false,0x00ff00);
+			var c:int = 0;
+			for (var i:int = 0; i < 16; i++) {
+				for (var o:int = 0; o < 16; o++) {
+					dummyTexture.fillRect(new Rectangle(i*16,o*16,16,16),_cols[c%_cols.length]);
+					c++;	
+				}
+			}
+		}
+		
+		public static function getDummyTexture() : BitmapData { return dummyTexture; }
 		
 		
 		public static function addTextureFromBMD(_bmd:BitmapData):int {

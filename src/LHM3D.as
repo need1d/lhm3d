@@ -58,9 +58,11 @@ package
 			Globals.context3D = stage.stage3Ds[0].context3D;			
 			Globals.context3D.configureBackBuffer(800, 600, 1, true);
 		
-			Globals.context3D.setCulling(Context3DTriangleFace.BACK);
+			Globals.context3D.setCulling(Context3DTriangleFace.FRONT);
 			Globals.context3D.setDepthTest(true, Context3DCompareMode.LESS);
-				
+			
+			TextureManager.init();
+			
 			load();
 			
 		}	

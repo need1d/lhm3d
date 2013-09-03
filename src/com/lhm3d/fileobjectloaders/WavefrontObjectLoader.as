@@ -24,7 +24,7 @@ package com.lhm3d.fileobjectloaders
 		
 		public function WavefrontObjectLoader(_filename:String, _scale:Number = 1, _scaleUV:Number = 1):void
 		{
-			super();
+			super(_filename);
 			
 			Globals.objectsToLoad++;
 			scaleUV = _scaleUV;	
@@ -94,9 +94,9 @@ package com.lhm3d.fileobjectloaders
 	
 					if (_toupleIndex == -1) {
 						_touples.push(_params[1]);
-						vertexLayer.push(_tmpVertexLayer[(int(_p1[0])-1)*3],_tmpVertexLayer[(int(_p1[0])-1)*3+1],_tmpVertexLayer[(int(_p1[0])-1)*3+2]);
+						vertexLayer.push(-_tmpVertexLayer[(int(_p1[0])-1)*3],_tmpVertexLayer[(int(_p1[0])-1)*3+1],_tmpVertexLayer[(int(_p1[0])-1)*3+2]);
 						uvLayer.push(_tmpUVLayer[(int(_p1[1])-1)*2],_tmpUVLayer[(int(_p1[1])-1)*2+1]);
-						normalLayer.push(_tmpNormalLayer[(int(_p1[2])-1)*3],_tmpNormalLayer[(int(_p1[2])-1)*3+1],_tmpNormalLayer[(int(_p1[2])-1)*3+2]);
+						normalLayer.push(-_tmpNormalLayer[(int(_p1[2])-1)*3],_tmpNormalLayer[(int(_p1[2])-1)*3+1],_tmpNormalLayer[(int(_p1[2])-1)*3+2]);
 						//normalLayer.push(0,0,0);
 						
 						indexLayer.push(uvLayer.length/2 -1);
@@ -110,9 +110,9 @@ package com.lhm3d.fileobjectloaders
 					
 					if (_toupleIndex == -1) {
 						_touples.push(_params[2]);	
-						vertexLayer.push(_tmpVertexLayer[(int(_p2[0])-1)*3],_tmpVertexLayer[(int(_p2[0])-1)*3+1],_tmpVertexLayer[(int(_p2[0])-1)*3+2]);
+						vertexLayer.push(-_tmpVertexLayer[(int(_p2[0])-1)*3],_tmpVertexLayer[(int(_p2[0])-1)*3+1],_tmpVertexLayer[(int(_p2[0])-1)*3+2]);
 						uvLayer.push(_tmpUVLayer[(int(_p2[1])-1)*2],_tmpUVLayer[(int(_p2[1])-1)*2+1]);
-						normalLayer.push(_tmpNormalLayer[(int(_p2[2])-1)*3],_tmpNormalLayer[(int(_p2[2])-1)*3+1],_tmpNormalLayer[(int(_p2[2])-1)*3+2]);
+						normalLayer.push(-_tmpNormalLayer[(int(_p2[2])-1)*3],_tmpNormalLayer[(int(_p2[2])-1)*3+1],_tmpNormalLayer[(int(_p2[2])-1)*3+2]);
 						//normalLayer.push(0,0,0);
 						
 						indexLayer.push(uvLayer.length/2 -1);
@@ -126,9 +126,9 @@ package com.lhm3d.fileobjectloaders
 					
 					if (_toupleIndex == -1) {
 						_touples.push(_params[3]);
-						vertexLayer.push(_tmpVertexLayer[(int(_p3[0])-1)*3],_tmpVertexLayer[(int(_p3[0])-1)*3+1],_tmpVertexLayer[(int(_p3[0])-1)*3+2]);
+						vertexLayer.push(-_tmpVertexLayer[(int(_p3[0])-1)*3],_tmpVertexLayer[(int(_p3[0])-1)*3+1],_tmpVertexLayer[(int(_p3[0])-1)*3+2]);
 						uvLayer.push(_tmpUVLayer[(int(_p3[1])-1)*2],_tmpUVLayer[(int(_p3[1])-1)*2+1]);
-						normalLayer.push(_tmpNormalLayer[(int(_p3[2])-1)*3],_tmpNormalLayer[(int(_p3[2])-1)*3+1],_tmpNormalLayer[(int(_p3[2])-1)*3+2]);
+						normalLayer.push(-_tmpNormalLayer[(int(_p3[2])-1)*3],_tmpNormalLayer[(int(_p3[2])-1)*3+1],_tmpNormalLayer[(int(_p3[2])-1)*3+2]);
 						//normalLayer.push(0,0,0);
 						
 						indexLayer.push(uvLayer.length/2 -1);

@@ -17,6 +17,8 @@ package com.lhm3d.fileobjectloaders
 				
 		private var biTangentTangentCalculated:Boolean = false;
 		
+		public var ID:String;
+		
 		//splitting
 		private var splitCount:int = 0;
 		private var minP:Vector3D;
@@ -27,8 +29,9 @@ package com.lhm3d.fileobjectloaders
 		protected var splitData:Vector.<SplitDataEntity> = new Vector.<SplitDataEntity>();
 		
 		
-		public function BaseObjectLoader()
+		public function BaseObjectLoader(_ID:String)
 		{
+			ID = _ID;
 		}
 		
 		/*

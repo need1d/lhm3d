@@ -73,6 +73,8 @@ package com.lhm3d.materialobjects
 			
 			boundingBox = new BoundingBox(_minP, _maxP); 
 			
+
+			
 		}
 		
 		public function getVertexLayer() :Vector.<Number> {return vertexLayer;}

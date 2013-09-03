@@ -130,6 +130,7 @@ package com.lhm3d.viewtree
 			
 			var _f:Boolean = false;
 			
+			
 			if (_bb1.icludesOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib1Used == false) {
