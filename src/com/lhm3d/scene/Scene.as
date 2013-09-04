@@ -27,6 +27,11 @@ package com.lhm3d.scene
 	public class Scene
 	{
 		
+		private var sceneComplete:Boolean = false;
+		private var materialComplete:Boolean = false;
+		
+		private var lines:Array;
+		
 		private var sceneEntities:Vector.<SceneEntity> = new Vector.<SceneEntity>();
 		private var differentObjects:Vector.<String> = new Vector.<String>();
 		private var objectLoaders:Vector.<BaseObjectLoader> = new Vector.<BaseObjectLoader>();
@@ -35,32 +40,52 @@ package com.lhm3d.scene
 		
 		private var pathFolder:String;
 		
+		private var materialParser:MaterialParser;
+		
 		public function Scene(_pathFolder:String) : void
 		{
 			pathFolder = _pathFolder;
 		
+			// load placament-file manually
 			var _loader:URLLoader = new URLLoader();
 			_loader.addEventListener(Event.COMPLETE, sceneLoadComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, ioSceneErrorHandler);
 			
-			var fileRequest:URLRequest = new URLRequest(_pathFolder + "/scene.txt");
+			var fileRequest:URLRequest = new URLRequest(_pathFolder + "scene.txt");
 			_loader.load(fileRequest);
 			
+			//load matarial parser-file var parse-class
+			materialParser = new MaterialParser(_pathFolder + "material.json", 	materialParseComplete);
 		}
+		
+		private function materialParseComplete() : void {
+			materialComplete = true;
+			
+			trace(">> yep, Material ist geparsed ");
+			
+			if (materialComplete && sceneComplete) beginBuildingScene();
+		}
+		
 		
 		private function sceneLoadComplete(e:Event) : void
 		{
-		
-			var _lines:Array = e.target.data.split(/\n/);
+			lines = e.target.data.split(/\n/);
+			sceneComplete = true;
 			
-			for (var i:int = 0; i < _lines.length; i ++) {
-				if (_lines[i] != "") {
+			if (materialComplete && sceneComplete) beginBuildingScene();
+		}
+		
+		
+		
+		private function beginBuildingScene() : void {
+		
+			for (var i:int = 0; i < lines.length; i ++) {
+				if (lines[i] != "") {
 					
-					var _subStr:Array = _lines[i].split(" ");			
+					var _subStr:Array = lines[i].split(" ");			
 					var _name:String = _subStr[0].split(".")[0];
 					
 					sceneEntities.push(new SceneEntity(_name,Number(_subStr[1]),Number(_subStr[3]),Number(_subStr[2]),-Number(_subStr[4])*(180.0/Math.PI),-Number(_subStr[6])*(180.0/Math.PI),-Number(_subStr[5])*(180.0/Math.PI),Number(_subStr[7])));
-					trace("Jaa?");
 					var _found:Boolean = false;
 					for (var o:int = 0; o < differentObjects.length; o++) {
 						if (differentObjects[o] == _name) _found = true;
@@ -68,34 +93,82 @@ package com.lhm3d.scene
 					if (!_found) differentObjects.push(_name);
 				}
 			}
-		
+			
 			for (i = 0; i < differentObjects.length; i++) {
 				objectLoaders.push(new WavefrontObjectLoader(pathFolder + "/" + differentObjects[i] + ".obj"));
-				
 			}
-			
-			
 		}
+		
+		
 		
 		public function sceneLoaded() : void 
 		{
 			
-			ViewTree.init(new Vector3D(-50,-50,-50), new Vector3D(50,50,50),3);
-			
 			var _dummyTexture:int = TextureManager.addTextureFromBMD(TextureManager.getDummyTexture());
 			
-			var _ref:Vector.<int> = new Vector.<int>();
-			for (var i:int = 0; i < objectLoaders.length; i++) {
-
-				objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
-				_ref.push(ViewTree.submitObjectToContainer(objects[objects.length-1]));
 			
+			// get bounding box for scene by using radius of placed objects
+			var minX:Number = Number.MAX_VALUE;
+			var minY:Number = Number.MAX_VALUE;
+			var minZ:Number = Number.MAX_VALUE;
+			
+			var maxX:Number = Number.MIN_VALUE;
+			var maxY:Number = Number.MIN_VALUE;
+			var maxZ:Number = Number.MIN_VALUE;
+			
+			// add objects to scene first
+			for (var i:int = 0; i < objectLoaders.length; i++) {
+				
+				
+				objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
+			}
+			
+			for (i = 0; i < sceneEntities.length; i++) {
+				var _objectIndex:int = -1;
+				for (var o:int = 0; o < differentObjects.length; o++) {
+					if (differentObjects[o] == sceneEntities[i].name) _objectIndex = o; 
+				}
+				
+				if (_objectIndex!= -1) {
+					
+					var _minX:Number = sceneEntities[i].x - objects[_objectIndex].getRadius() * sceneEntities[i].scale;
+					var _maxX:Number = sceneEntities[i].x + objects[_objectIndex].getRadius() * sceneEntities[i].scale;
+					
+					var _minY:Number = sceneEntities[i].y - objects[_objectIndex].getRadius() * sceneEntities[i].scale;
+					var _maxY:Number = sceneEntities[i].y + objects[_objectIndex].getRadius() * sceneEntities[i].scale;
+					
+					var _minZ:Number = sceneEntities[i].z - objects[_objectIndex].getRadius() * sceneEntities[i].scale;
+					var _maxZ:Number = sceneEntities[i].z + objects[_objectIndex].getRadius() * sceneEntities[i].scale;
+					
+					if (_minX < minX) minX = _minX;
+					if (_maxX > maxX) maxX = _maxX;
+					
+					if (_minY < minY) minY = _minY;
+					if (_maxY > maxY) maxY = _maxY;
+					
+					if (_minZ < minZ) minZ = _minZ;
+					if (_maxZ > maxZ) maxZ = _maxZ;					
+					
+				}
+				
+			}
+			
+			trace("mins:", minX, minY, minZ);
+			trace("max:", maxX, maxY, maxZ);
+			
+
+			ViewTree.init(new Vector3D(minX,minY,minZ), new Vector3D(maxX,maxY,maxZ),3);
+			
+			var _ref:Vector.<int> = new Vector.<int>();
+			
+			for (o = 0; o < objects.length; o++) {
+				_ref.push(ViewTree.submitObjectToContainer(objects[o]));
 			}
 			
 			for (i = 0; i < sceneEntities.length; i++) {
 				
-				var _objectIndex:int = -1;
-				for (var o:int = 0; o < differentObjects.length; o++) {
+				_objectIndex = -1;
+				for (o = 0; o < differentObjects.length; o++) {
 					if (differentObjects[o] == sceneEntities[i].name) _objectIndex = o; 
 				}
 				

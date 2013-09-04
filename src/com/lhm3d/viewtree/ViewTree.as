@@ -43,7 +43,6 @@ package com.lhm3d.viewtree
 			_m.appendRotation(_rz,new Vector3D(0,0,1));
 			_m.appendTranslation(_x,_y,_z);
 			
-			trace("rotation values:", _rx, _ry, _rz);
 			
 			var _treeBB:BoundingBox = new BoundingBox(new Vector3D(0,0,0), new Vector3D(0,0,0));
 
@@ -68,7 +67,6 @@ package com.lhm3d.viewtree
 		public static function render():void {
 			for (var i:int = 0; i < objects.length; i++) objects[i].rendered = false;			
 			tree.render();
-			trace("objects rendered:", Globals.renderedObjectCount);
 		}
 		
 		

@@ -34,7 +34,6 @@ package com.lhm3d.input
 
 		private static function keyPressed(event:KeyboardEvent):void {
 			keysDown[event.keyCode] = true;
-			trace(event.keyCode);
 		}
 		
 

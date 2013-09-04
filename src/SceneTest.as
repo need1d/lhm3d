@@ -33,7 +33,7 @@ package
 		
 		
 		public override function load():void {
-			scene = new Scene("./data/scenetest/testscene");	
+			scene = new Scene("./data/scenetest/testscene/");	
 		}
 		
 		public override function loaded():void {
@@ -44,7 +44,6 @@ package
 		public override function update():void {
 			Camera.updateFlyCamera();
 		}
-		
 		
 		public override function render():void {
 			Camera.setFlyCamera();

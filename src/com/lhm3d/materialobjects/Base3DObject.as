@@ -77,6 +77,8 @@ package com.lhm3d.materialobjects
 			
 		}
 		
+		public function getRadius():Number {return radius;}
+		
 		public function getVertexLayer() :Vector.<Number> {return vertexLayer;}
 		
 		public function getIndexLayer() :Vector.<uint> {return indexLayer;}

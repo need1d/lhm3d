@@ -16,7 +16,6 @@ package com.lhm3d.light
 		private var saveDir:Vector3D;
 		
 		public var baseColor:Vector.<Number>;
-		public var haloColor:Vector.<Number>;
 		public var color1:Vector.<Number>;
 		public var color2:Vector.<Number>;
 
@@ -29,12 +28,18 @@ package com.lhm3d.light
 			setDirection(1,0.5,-1);
 			
 			setBaseColor(0.8, 0.8, 0.8);
-			setHaloColor(0.1, 0.5, 0.0);
 			setColorAdditive(1.0, 1.0, 1.0, 0.7);
 			setColorAmbient(0.0, 0.0, 0.0, 0.4);
 		}
 		
-		
+		public function clone() : Light {
+			var _light:Light = new Light();
+			_light.setBaseColor(baseColor[0],baseColor[1],baseColor[2]);
+			_light.setColorAdditive(color1[0],color1[1],color1[2],color1Amount);
+			_light.setColorAmbient(color2[0],color2[1],color2[2],color2Amount);
+			
+			return _light;
+		}
 	
 		public function setDirection(_x:Number,_y:Number,_z:Number):void {
 			saveDir = new Vector3D(_x,_y,_z,0);
@@ -59,20 +64,12 @@ package com.lhm3d.light
 			directionC2[0] = -_v.x * color2Amount;
 			directionC2[1] = -_v.y * color2Amount;
 			directionC2[2] = -_v.z * color2Amount;
-			
-		}
-		
-		
-		public function setHaloColor(_r:Number, _g:Number, _b:Number):void {
-			haloColor = new Vector.<Number>();
-			haloColor.push(_r,_g,_b,1.0);
 		}
 		
 		
 		public function setBaseColor(_r:Number, _g:Number, _b:Number):void {
 			baseColor = new Vector.<Number>();
 			baseColor.push(_r,_g,_b,1.0);
-			
 		}
 		
 		public function setColorAdditive(_r:Number, _g:Number, _b:Number, _amount:Number):void {
@@ -91,10 +88,7 @@ package com.lhm3d.light
 			recalcDirs();
 		}
 		
-		
-		
-
-		
+	
 		
 	}
 }
