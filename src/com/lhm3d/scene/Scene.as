@@ -60,9 +60,7 @@ package com.lhm3d.scene
 		
 		private function materialParseComplete() : void {
 			materialComplete = true;
-			
-			trace(">> yep, Material ist geparsed ");
-			
+	
 			if (materialComplete && sceneComplete) beginBuildingScene();
 		}
 		
@@ -78,7 +76,8 @@ package com.lhm3d.scene
 		
 		
 		private function beginBuildingScene() : void {
-		
+			
+			// objects to load
 			for (var i:int = 0; i < lines.length; i ++) {
 				if (lines[i] != "") {
 					
@@ -95,8 +94,31 @@ package com.lhm3d.scene
 			}
 			
 			for (i = 0; i < differentObjects.length; i++) {
-				objectLoaders.push(new WavefrontObjectLoader(pathFolder + "/" + differentObjects[i] + ".obj"));
+				objectLoaders.push(new WavefrontObjectLoader(pathFolder + differentObjects[i] + ".obj"));
 			}
+			
+			// object Materials to load
+			for (i = 0; i < materialParser.cubeMaps.length; i++) {
+				materialParser.cubeMaps[i].cubeTextureData.push(new TextureLoader(pathFolder + materialParser.cubeMaps[i].name + "_xleft.png"));
+				materialParser.cubeMaps[i].cubeTextureData.push(new TextureLoader(pathFolder + materialParser.cubeMaps[i].name + "_xright.png"));
+				materialParser.cubeMaps[i].cubeTextureData.push(new TextureLoader(pathFolder + materialParser.cubeMaps[i].name + "_yup.png"));
+				materialParser.cubeMaps[i].cubeTextureData.push(new TextureLoader(pathFolder + materialParser.cubeMaps[i].name + "_ydown.png"));
+				materialParser.cubeMaps[i].cubeTextureData.push(new TextureLoader(pathFolder + materialParser.cubeMaps[i].name + "_zback.png"));
+				materialParser.cubeMaps[i].cubeTextureData.push(new TextureLoader(pathFolder + materialParser.cubeMaps[i].name + "_zfront.png"));
+			}
+			
+			for (i = 0; i < materialParser.objectMaterials.length; i++) {
+				materialParser.objectMaterials[i].textureData.push(new TextureLoader(pathFolder + materialParser.objectMaterials[i].assign + ".png"));
+				if (MaterialFactory.hasBumpTexture(materialParser.objectMaterials[i].material)) {
+					materialParser.objectMaterials[i].textureData.push(new TextureLoader(pathFolder + materialParser.objectMaterials[i].assign + "_bump.png"));
+				}
+				if (MaterialFactory.hasEnvTexture(materialParser.objectMaterials[i].material)) {
+					materialParser.objectMaterials[i].textureData.push(new TextureLoader(pathFolder + materialParser.objectMaterials[i].assign + "_env.png"));
+				}
+				
+			}
+			
+			
 		}
 		
 		
@@ -105,6 +127,17 @@ package com.lhm3d.scene
 		{
 			
 			var _dummyTexture:int = TextureManager.addTextureFromBMD(TextureManager.getDummyTexture());
+			
+			// building up the cube maps
+			for (var i:int = 0; i < materialParser.cubeMaps.length; i++) {
+				materialParser.cubeMaps[i].index = TextureManager.addCubeTextureFromBMD(materialParser.cubeMaps[i].cubeTextureData[0].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[1].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[2].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[3].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[4].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[5].getBitmapData());
+			}
+			
+			// building up normal Texture Maps
+			for (i = 0; i < materialParser.objectMaterials[i].length; i++) {
+				if (materialParser.objectMaterials[i].textureData.length > 0) materialParser.objectMaterials[i].texIndex1 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[0].getBitmapData());
+				if (materialParser.objectMaterials[i].textureData.length > 1) materialParser.objectMaterials[i].texIndex2 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[1].getBitmapData());
+			}
 			
 			
 			// get bounding box for scene by using radius of placed objects
@@ -117,7 +150,9 @@ package com.lhm3d.scene
 			var maxZ:Number = Number.MIN_VALUE;
 			
 			// add objects to scene first
-			for (var i:int = 0; i < objectLoaders.length; i++) {
+			for (i = 0; i < objectLoaders.length; i++) {
+				
+				var _materialFound
 				
 				
 				objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));

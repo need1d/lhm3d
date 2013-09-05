@@ -7,7 +7,7 @@ package com.lhm3d.scene
 		
 		public var cubeTextureData:Vector.<TextureLoader> = new Vector.<TextureLoader>();
 		public var name:String;
-		
+		public var index:int;
 		
 		public function CubeMapEntity(_name:String) : void 
 		{
@@ -15,5 +15,6 @@ package com.lhm3d.scene
 			name = _name;
 			
 		}
+		
 	}
 }

@@ -26,7 +26,30 @@ package com.lhm3d.materialobjects
 		
 		public static function buildCLTex3DWater(_envAmount:Number, _alphaAmount:Number, _r:Number, _g:Number, _b:Number, _wave1TextureIndex:int, _wave2TextureIndex:int, _cubeTextureIndex:int,_objectLoader:BaseObjectLoader): CLTex3DWaterObject {
 			return new CLTex3DWaterObject(_envAmount,_alphaAmount,_r,_g,_b,_wave1TextureIndex,_wave2TextureIndex,_cubeTextureIndex,_objectLoader.getVertexLayer(),_objectLoader.getNormalLayer(),_objectLoader.getUVLayer(),_objectLoader.getIndexLayer());
-		} 
+		}
+		
+		public static function hasBumpTexture(_materialName:String) : Boolean {
+		
+			if (_materialName == "Tex3DWater") return true;
+			if (_materialName == "TexCubeEnvBump") return true;
+			if (_materialName == "TexCubeEnvBumpFresnel") return true;
+
+			if (_materialName == "TexEnvBump") return true;
+			if (_materialName == "TexEnvBumpFresnel") return true;
+
+			return false;
+		}
+
+		public static function hasEnvTexture(_materialName:String) : Boolean {
+		
+			if (_materialName == "TexEnv") return true;
+			if (_materialName == "TexEnvBump") return true;
+			if (_materialName == "TexEnvBumpFresnel") return true;
+			
+			return false;
+		}
+		
+		
 		
 		
 	}

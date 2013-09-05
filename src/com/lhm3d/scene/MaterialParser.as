@@ -1,5 +1,6 @@
 package com.lhm3d.scene
 {
+	import com.lhm3d.geometryhelpers.HelpMath;
 	import com.lhm3d.light.Light;
 	
 	import flash.events.Event;
@@ -14,6 +15,7 @@ package com.lhm3d.scene
 		
 		public var lights:Vector.<Light> = new Vector.<Light>();
 		public var cubeMaps:Vector.<CubeMapEntity> = new Vector.<CubeMapEntity>();
+		public var objectMaterials:Vector.<ObjectMaterialEntity> = new Vector.<ObjectMaterialEntity>();
 		
 		public function MaterialParser(_url:String, _callBack:Function) : void
 		{
@@ -44,18 +46,53 @@ package com.lhm3d.scene
 				if ( data.lights[i].hasOwnProperty("directionX") && data.lights[i].hasOwnProperty("directionY") && data.lights[i].hasOwnProperty("directionZ") ) {
 					_light.setDirection(Number(data.lights[i].directionX),Number(data.lights[i].directionY), Number(data.lights[i].directionZ));
 				}
+				var _color:uint;
 				
-				trace("light", i);
+				if ( data.lights[i].hasOwnProperty("base") ) {					
+					_color = uint(data.lights[i].base);
+					_light.setBaseColor(HelpMath.extractR(_color),HelpMath.extractG(_color), HelpMath.extractB(_color));
+				}
+				
+				if ( data.lights[i].hasOwnProperty("additive") && data.lights[i].hasOwnProperty("additiveAmount") )  {					
+					_color = uint(data.lights[i].additive);
+					_light.setColorAdditive(HelpMath.extractR(_color),HelpMath.extractG(_color), HelpMath.extractB(_color), Number(data.lights[i].hasOwnProperty("additiveAmount")));
+				}
+				
+				if ( data.lights[i].hasOwnProperty("ambient") && data.lights[i].hasOwnProperty("ambientAmount") )  {					
+					_color = uint(data.lights[i].ambient);
+					_light.setColorAmbient(HelpMath.extractR(_color),HelpMath.extractG(_color), HelpMath.extractB(_color), Number(data.lights[i].hasOwnProperty("ambientAmount")));
+				}
 				
 				lights.push(_light);
 			}
 			
 			
 			// cube maps
-			for (i = 0; i < data.cubeMaps.length; i++) {
-				cubeMaps.push(new CubeMapEntity(data.cubeMaps[i].name));
+			if (data.hasOwnProperty("cubeMaps")) {
+				for (i = 0; i < data.cubeMaps.length; i++) {
+					cubeMaps.push(new CubeMapEntity(data.cubeMaps[i].name));
+				}
 			}
 			
+			//Materials
+			if (data.hasOwnProperty("materials")) {
+				for (i = 0; i < data.materials.length; i++) {
+					
+					var _assign:String = "none";
+					var _material:String = "dummyTex";
+					var _cubeMapName:String = "none";
+					var _envAmount:Number = 0.5;
+					var _lightNr:int = 0;
+					
+					if (data.materials[i].hasOwnProperty("assign")) _assign = data.materials[i].assign;
+					if (data.materials[i].hasOwnProperty("material")) _material = data.materials[i].material;
+					if (data.materials[i].hasOwnProperty("cubeMap")) _cubeMapName = data.materials[i].cubeMap;
+					if (data.materials[i].hasOwnProperty("envAmount")) _envAmount = data.materials[i].envAmount;
+					if (data.materials[i].hasOwnProperty("light")) _lightNr = data.materials[i].light;
+					
+					objectMaterials.push( new ObjectMaterialEntity(_assign,_material,_cubeMapName,_envAmount,_lightNr));
+				}
+			}
 			
 			
 			callBack();
