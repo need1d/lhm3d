@@ -31,6 +31,8 @@ package com.lhm3d.texturemanager
 		
 		public function TextureLoader(_fileName:String)
 		{
+			trace("Texture Load Stack:",  _fileName);
+			
 			Globals.texturesToLoad++;
 			
 			fileName = _fileName;

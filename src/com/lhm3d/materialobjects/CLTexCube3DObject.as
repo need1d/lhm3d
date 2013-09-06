@@ -23,7 +23,7 @@ package com.lhm3d.materialobjects
 	
 	
 	
-	public class CLTexCubeEnv3DObject extends Base3DObject
+	public class CLTexCube3DObject extends Base3DObject
 	{
 		
 		private var textureIndex:int;
@@ -31,7 +31,7 @@ package com.lhm3d.materialobjects
 		
 		private var envAmount:Number;
 		
-		public function CLTexCubeEnv3DObject(_envAmount:Number, _textureIndex:int, _cubeEnvTexIndex:int, _vertexLayer:Vector.<Number>, 
+		public function CLTexCube3DObject(_envAmount:Number, _textureIndex:int, _cubeEnvTexIndex:int, _vertexLayer:Vector.<Number>, 
 										 	_normalLayer:Vector.<Number>,_uvLayer:Vector.<Number>,
 										 	_indexLayer:Vector.<uint>)
 		{

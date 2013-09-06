@@ -121,6 +121,12 @@ package com.lhm3d.scene
 			
 		}
 		
+		private function getCubeMapIndex(_name:String) : int {
+			for (var i:int = 0; i < materialParser.cubeMaps.length; i++) {
+				if (_name == materialParser.cubeMaps[i].name) return materialParser.cubeMaps[i].index;
+			}
+			return -1;
+		}
 		
 		
 		public function sceneLoaded() : void 
@@ -130,13 +136,15 @@ package com.lhm3d.scene
 			
 			// building up the cube maps
 			for (var i:int = 0; i < materialParser.cubeMaps.length; i++) {
+				trace("hier cube maps");	
 				materialParser.cubeMaps[i].index = TextureManager.addCubeTextureFromBMD(materialParser.cubeMaps[i].cubeTextureData[0].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[1].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[2].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[3].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[4].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[5].getBitmapData());
 			}
 			
 			// building up normal Texture Maps
-			for (i = 0; i < materialParser.objectMaterials[i].length; i++) {
+			for (i = 0; i < materialParser.objectMaterials.length; i++) {
 				if (materialParser.objectMaterials[i].textureData.length > 0) materialParser.objectMaterials[i].texIndex1 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[0].getBitmapData());
 				if (materialParser.objectMaterials[i].textureData.length > 1) materialParser.objectMaterials[i].texIndex2 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[1].getBitmapData());
+				trace("hier texture maps maps", materialParser.objectMaterials[i].textureData.length);	
 			}
 			
 			
@@ -150,17 +158,36 @@ package com.lhm3d.scene
 			var maxZ:Number = Number.MIN_VALUE;
 			
 			// add objects to scene first
-			for (i = 0; i < objectLoaders.length; i++) {
+			for (i = 0; i < differentObjects.length; i++) {
+		
+				var _matIndex:int = -1;
+				for (var o:int = 0; o < materialParser.objectMaterials.length; o++) {
+					if (materialParser.objectMaterials[o].assign == differentObjects[i]) {
+						_matIndex = o;
+					}
+				}
 				
-				var _materialFound
+				if (_matIndex > -1) {
+					
+					if (materialParser.objectMaterials[_matIndex].material == "CLTexCubeBumpFresnel") {
+						objects.push(MaterialFactory.buildCLTexCubeEnvBumpFresnelObject(materialParser.objectMaterials[_matIndex].envAmount,
+																						materialParser.objectMaterials[_matIndex].texIndex1,
+																						getCubeMapIndex(materialParser.objectMaterials[_matIndex].cubeMapName),
+																						materialParser.objectMaterials[_matIndex].texIndex2,objectLoaders[i]));
+																						
+						trace("hier materials");	
+					}
+					
+					
+				} else {
 				
-				
-				objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
+					objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
+				}
 			}
 			
 			for (i = 0; i < sceneEntities.length; i++) {
 				var _objectIndex:int = -1;
-				for (var o:int = 0; o < differentObjects.length; o++) {
+				for (o = 0; o < differentObjects.length; o++) {
 					if (differentObjects[o] == sceneEntities[i].name) _objectIndex = o; 
 				}
 				

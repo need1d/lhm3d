@@ -23,7 +23,7 @@ package com.lhm3d.materialobjects
 	
 	
 	
-	public class CLTexCubeEnvBumpFresnel3DObject extends Base3DObject
+	public class CLTexCubeBump3DObject extends Base3DObject
 	{
 		
 		private var textureIndex:int;
@@ -32,9 +32,8 @@ package com.lhm3d.materialobjects
 		
 		private var envAmount:Number;
 		
-		
-		public function CLTexCubeEnvBumpFresnel3DObject(_envAmount:Number, _textureIndex:int, _cubeEnvTexIndex:int, _bumpTexIndex:int, _vertexLayer:Vector.<Number>, 
-												 _normalLayer:Vector.<Number>,_uvLayer:Vector.<Number>, _indexLayer:Vector.<uint>)
+		public function CLTexCubeBump3DObject(_envAmount:Number, _textureIndex:int, _cubeEnvTexIndex:int, _bumpTexIndex:int, _vertexLayer:Vector.<Number>, 
+											 _normalLayer:Vector.<Number>,_uvLayer:Vector.<Number>, _indexLayer:Vector.<uint>)
 		{
 			super(_vertexLayer,_indexLayer);
 			
@@ -48,10 +47,10 @@ package com.lhm3d.materialobjects
 			for (var i:int = 0; i < _vertexLayer.length / 3; i++) {
 				vertices.push(_vertexLayer[i*3],_vertexLayer[i*3+1],_vertexLayer[i*3+2],_normalLayer[i*3],_normalLayer[i*3+1],_normalLayer[i*3+2],_uvLayer[i*2],_uvLayer[i*2+1]);
 			}
-			
+					
 			vertexbuffer = Globals.context3D.createVertexBuffer(_vertexLayer.length / 3,8);
 			vertexbuffer.uploadFromVector(vertices,0, vertices.length / 8);		
-			
+						
 			indexbuffer = Globals.context3D.createIndexBuffer(_indexLayer.length);			
 			indexbuffer.uploadFromVector(_indexLayer, 0, _indexLayer.length);	
 			
@@ -96,11 +95,6 @@ package com.lhm3d.materialobjects
 				
 				"tex ft1, ft3, fs1 <cube,linear,nomip> \n"+  //env map texture in ft1
 				"mul ft1, ft1, fc6 \n"+
-				
-				"mov ft4, ft3.z \n" + // fresnel code...
-				"sat ft4, ft4 \n" +
-				"mul ft1, ft1, ft4 \n"+ // fresnel code...
-				
 				"add ft2, ft2, ft1 \n"+ 
 				
 				"dp3 ft1, fc1, ft3 \n"+		//dot transform normal -> light direction
@@ -172,4 +166,4 @@ package com.lhm3d.materialobjects
 		}
 		
 	}
-}// ActionScipf file
+}// ActionScript file

@@ -106,14 +106,14 @@ package
 			envmapTexture = TextureManager.addTextureFromBMD(envmapTextureData.getBitmapData()); // add texture to manager and get refereence
 			bumpTexture = TextureManager.addTextureFromBMD(bumpTextureData.getBitmapData()); // add texture to manager and get refereence	
 			
-			torusObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
-			torusObject2 = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
+			torusObject = new CLTexCubeBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
+			torusObject2 = new CLTexCubeBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,torusObjectData.getVertexLayer(),torusObjectData.getNormalLayer(),torusObjectData.getUVLayer(),torusObjectData.getIndexLayer()); // generate env / bump mapped lighting material	
 
-			boxObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
+			boxObject = new CLTexCubeBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
 			
-			dummyCubeObject = new CLTexCubeEnvBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
+			dummyCubeObject = new CLTexCubeBumpFresnel3DObject(0.8,torusTexture,cubeTexture,bumpTexture,boxObjectData.getVertexLayer(),boxObjectData.getNormalLayer(),boxObjectData.getUVLayer(),boxObjectData.getIndexLayer()); 
 			
-			castleCollision = new CLTexCubeEnvBumpFresnel3DObject(0.2,bumpTexture,cubeTexture,bumpTexture,castleCollisionData.getVertexLayer(),castleCollisionData.getNormalLayer(),castleCollisionData.getUVLayer(),castleCollisionData.getIndexLayer()); 
+			castleCollision = new CLTexCubeBumpFresnel3DObject(0.2,bumpTexture,cubeTexture,bumpTexture,castleCollisionData.getVertexLayer(),castleCollisionData.getNormalLayer(),castleCollisionData.getUVLayer(),castleCollisionData.getIndexLayer()); 
 			
 
 				

@@ -29,14 +29,14 @@
 	"materials" : [
 		{	
 			"assign": "Monkey",
-			"material": "CLTexEnvBumpFresnel",
+			"material": "CLTexCubeBumpFresnel",
 			"cubeMap": "cube1", 
 			"envAmount" : 0.7
 		},
 		
 		{	
 			"assign": "Torus",
-			"material": "CLTexEnvBumpFresnel",
+			"material": "CLTexCubeBumpFresnel",
 			"cubeMap": "cube1", 
 			"envAmount" : 0.7,
 			"light" : 1

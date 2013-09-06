@@ -14,13 +14,13 @@ package com.lhm3d.materialobjects
 		}
 		
 		
-		public static function buildCLTexCubeEnvObject(_envAmount:int,_textureIndex:int,_cubeTextureIndex:int,_objectLoader:BaseObjectLoader) : CLTexCubeEnv3DObject {
-			return new CLTexCubeEnv3DObject(_envAmount,_textureIndex,_cubeTextureIndex,_objectLoader.getVertexLayer(),_objectLoader.getNormalLayer(),_objectLoader.getUVLayer(),_objectLoader.getIndexLayer());
+		public static function buildCLTexCubeEnvObject(_envAmount:int,_textureIndex:int,_cubeTextureIndex:int,_objectLoader:BaseObjectLoader) : CLTexCube3DObject {
+			return new CLTexCube3DObject(_envAmount,_textureIndex,_cubeTextureIndex,_objectLoader.getVertexLayer(),_objectLoader.getNormalLayer(),_objectLoader.getUVLayer(),_objectLoader.getIndexLayer());
 		}
 		
 		
-		public static function buildCLTexCubeEnvBumpFresnelObject(_envAmount:Number,_textureIndex:int,_cubeTextureIndex:int,_bumpTextureIndex:int,_objectLoader:BaseObjectLoader) : CLTexCubeEnvBumpFresnel3DObject {
-			return new 	CLTexCubeEnvBumpFresnel3DObject(_envAmount,_textureIndex, _cubeTextureIndex, _bumpTextureIndex,_objectLoader.getVertexLayer(),_objectLoader.getNormalLayer(),_objectLoader.getUVLayer(),_objectLoader.getIndexLayer());
+		public static function buildCLTexCubeEnvBumpFresnelObject(_envAmount:Number,_textureIndex:int,_cubeTextureIndex:int,_bumpTextureIndex:int,_objectLoader:BaseObjectLoader) : CLTexCubeBumpFresnel3DObject {
+			return new 	CLTexCubeBumpFresnel3DObject(_envAmount,_textureIndex, _cubeTextureIndex, _bumpTextureIndex,_objectLoader.getVertexLayer(),_objectLoader.getNormalLayer(),_objectLoader.getUVLayer(),_objectLoader.getIndexLayer());
 		}
 		
 		
@@ -30,21 +30,21 @@ package com.lhm3d.materialobjects
 		
 		public static function hasBumpTexture(_materialName:String) : Boolean {
 		
-			if (_materialName == "Tex3DWater") return true;
-			if (_materialName == "TexCubeEnvBump") return true;
-			if (_materialName == "TexCubeEnvBumpFresnel") return true;
+			if (_materialName == "CLTex3DWater") return true;
+			if (_materialName == "CLTexCubeBump") return true;
+			if (_materialName == "CLTexCubeBumpFresnel") return true;
 
-			if (_materialName == "TexEnvBump") return true;
-			if (_materialName == "TexEnvBumpFresnel") return true;
+			if (_materialName == "CLTexEnvBump") return true;
+			if (_materialName == "CLTexEnvBumpFresnel") return true;
 
 			return false;
 		}
 
 		public static function hasEnvTexture(_materialName:String) : Boolean {
 		
-			if (_materialName == "TexEnv") return true;
-			if (_materialName == "TexEnvBump") return true;
-			if (_materialName == "TexEnvBumpFresnel") return true;
+			if (_materialName == "CLTexEnv") return true;
+			if (_materialName == "CLTexEnvBump") return true;
+			if (_materialName == "CLTexEnvBumpFresnel") return true;
 			
 			return false;
 		}
