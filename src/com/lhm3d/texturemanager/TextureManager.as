@@ -17,10 +17,11 @@ package com.lhm3d.texturemanager
 		public static var cubeTextures:Vector.<CubeTextureManagerEntity> = new Vector.<CubeTextureManagerEntity>();
 		
 		private static var dummyTexture:BitmapData;
+		public static var dummyTextureIndex:int;
 		
 		public static function init():void {
-			
-			createDummyTexture();
+			createDummyTexture()
+			dummyTextureIndex = addTextureFromBMD(dummyTexture);
 		}
 		
 		

@@ -1,0 +1,49 @@
+{
+	"lights" : [
+		{
+			"directionX": 1.0,
+			"directionY": 0.5,
+			"directionZ": -1.0,
+
+			"base": "0xffaaaa",
+			"additive": "0xffffff",
+			"additiveAmount": 0.7,
+			"ambient": "0x000000",
+			"ambientAmount": 0.4
+		},
+		
+		{
+			"base": "0x00ff00"
+		}
+	
+	],
+		
+	
+	
+	"cubeMaps" : [
+		{"name" : "cube1"},
+		{"name" : "cube2"}
+	],
+	
+	
+	"materials" : [
+		{	
+			"assign": "Track",
+			"material": "CLTexCubeBumpFresnel",
+			"cubeMap": "cube1", 
+			"envAmount" : 0.7
+		},
+		
+		{	
+			"assign": "Torus",
+			"material": "CLTexCubeBumpFresnel",
+			"cubeMap": "cube1", 
+			"envAmount" : 0.7,
+			"light" : 1
+		}
+	
+	
+	]
+
+}
+

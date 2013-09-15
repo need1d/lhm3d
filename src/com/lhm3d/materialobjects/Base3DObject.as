@@ -11,9 +11,11 @@ package com.lhm3d.materialobjects
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import flash.display3D.Context3D;
+	import flash.display3D.Context3DBlendFactor;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DTextureFormat;
 	import flash.display3D.Context3DVertexBufferFormat;
+	import flash.display3D.Context3DTriangleFace;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
 	import flash.display3D.VertexBuffer3D;
@@ -30,8 +32,6 @@ package com.lhm3d.materialobjects
 		
 		protected var vertexbuffer:VertexBuffer3D;
 		protected var indexbuffer:IndexBuffer3D;
-		
-		protected var program:Program3D;
 		
 		protected var light:Light;
 				
@@ -110,7 +110,7 @@ package com.lhm3d.materialobjects
 	
 		// Methoden, die überschrieben werden
 		
-		public function renderWithMatrix(_m:Matrix3D):void  {
+		public function renderWithMatrix(_m:Matrix3D, _cull:String = Context3DTriangleFace.FRONT, _blend1:String = Context3DBlendFactor.ONE, _blend2:String = Context3DBlendFactor.ZERO):void  {
 
 		}
 		

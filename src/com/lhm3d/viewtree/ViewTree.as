@@ -14,7 +14,7 @@ package com.lhm3d.viewtree
 		public static var objectContainer:Vector.<Base3DObject>;
 		public static var objects:Vector.<TreeEntity>;
 		
-		private static var tree:OctreeSibling;
+		public static var tree:OctreeSibling;
 		
 		public function ViewTree()
 		{
@@ -35,27 +35,26 @@ package com.lhm3d.viewtree
 		
 		public static function addObjectAtPosRotScale(_ref:int,_x:Number,_y:Number,_z:Number,
 												 		 _rx:Number,_ry:Number,_rz:Number,_s:Number):void {
-		
+							
 			var _m:Matrix3D = new Matrix3D();
-			_m.appendScale(_s,_s,_s);			
-			_m.appendRotation(_rx,new Vector3D(1,0,0));
-			_m.appendRotation(_ry,new Vector3D(0,1,0));
-			_m.appendRotation(_rz,new Vector3D(0,0,1));
-			_m.appendTranslation(_x,_y,_z);
+						
+			_m.appendRotation(-_rz,new Vector3D(0,0,1));
+			_m.appendRotation(-_ry,new Vector3D(0,1,0));
+			_m.appendRotation(-_rx,new Vector3D(1,0,0));
 			
+			_m.appendScale(_s,_s,_s);
+						
+			trace("scale:", _s);
+			_m.appendTranslation(_x,_z,_y);
 			
 			var _treeBB:BoundingBox = new BoundingBox(new Vector3D(0,0,0), new Vector3D(0,0,0));
-
-			
 			_treeBB.cloneValuesFromOtherBB(objectContainer[_ref].getBoundingBox());
-			_treeBB.appendMatrix(_m);
+			_treeBB.setToMatrix(_m);
 			
-			objects.push(new TreeEntity(_ref,_m));
+			objects.push(new TreeEntity(_ref,_m,_treeBB));
 			var _objectsRef:int = objects.length-1;
-			
-			
-			tree.addObject(_objectsRef,_treeBB,0);
-			
+		
+			tree.addObject(_objectsRef,_treeBB,0);	
 		}
 		
 		

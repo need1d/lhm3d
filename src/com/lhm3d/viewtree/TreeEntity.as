@@ -12,9 +12,12 @@ package com.lhm3d.viewtree
 		
 		internal var rendered:Boolean = false;
 		
-		public function TreeEntity(_ref:int,_m:Matrix3D):void {
+		public var boundingBox:BoundingBox;
+		
+		public function TreeEntity(_ref:int,_m:Matrix3D, _bb:BoundingBox):void {
 			m= _m.clone();
 			ref = _ref;
+			boundingBox = _bb;
 		}
 		
 		

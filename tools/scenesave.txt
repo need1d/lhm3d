@@ -8,7 +8,15 @@ def write_some_data(context, filepath):
     
     for ob in bpy.data.objects:
         if ob.type == 'MESH':
-               f.write('%s %f %f %f %f %f %f %f\n' % (ob.name, ob.location[0], ob.location[1], ob.location[2], ob.rotation_euler[0], ob.rotation_euler[1], ob.rotation_euler[2], ob.scale[0]))
+               position, quaternion, scale = ob.matrix_world.decompose()
+               y = quaternion[2]
+               quaternion[2] = quaternion[3]
+               quaternion[3] = y
+               rotation = quaternion.to_euler("XYZ")
+               
+               f.write('%s %f %f %f %f %f %f %f\n' % (ob.name, ob.location[0], ob.location[1], ob.location[2], rotation.x, rotation.y, rotation.z, ob.scale[0]))
+               
+               #f.write('%s %f %f %f %f %f %f %f\n' % (ob.name, ob.location[0], ob.location[1], ob.location[2], ob.rotation_euler[0], ob.rotation_euler[1], ob.rotation_euler[2], ob.scale[0]))
         
     f.close()
 

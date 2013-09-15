@@ -1,9 +1,14 @@
 package com.lhm3d.viewtree
 {
 	import com.lhm3d.camera.*;
-	import com.lhm3d.globals.Globals;
 	import com.lhm3d.geometryhelpers.BoundingBox;
+	import com.lhm3d.globals.Globals;
+	import com.lhm3d.materialobjects.Tex3DObject;
+	import com.lhm3d.texturemanager.*;
 	
+	import flash.display3D.Context3DBlendFactor;
+	import flash.display3D.Context3DTriangleFace;
+	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
 	
 	
@@ -11,14 +16,14 @@ package com.lhm3d.viewtree
 	public class OctreeSibling
 	{
 		
-		protected var sib1:OctreeSibling;
-		protected var sib2:OctreeSibling;
-		protected var sib3:OctreeSibling;
-		protected var sib4:OctreeSibling;		
-		protected var sib5:OctreeSibling;
-		protected var sib6:OctreeSibling;
-		protected var sib7:OctreeSibling;
-		protected var sib8:OctreeSibling;
+		public var sib1:OctreeSibling;
+		public var sib2:OctreeSibling;
+		public var sib3:OctreeSibling;
+		public var sib4:OctreeSibling;		
+		public var sib5:OctreeSibling;
+		public var sib6:OctreeSibling;
+		public var sib7:OctreeSibling;
+		public var sib8:OctreeSibling;
 
 		protected var sib1Used:Boolean = false;
 		protected var sib2Used:Boolean = false;
@@ -30,7 +35,7 @@ package com.lhm3d.viewtree
 		protected var sib8Used:Boolean = false;
 		
 		
-		private var bb:BoundingBox;
+		public var bb:BoundingBox;
 		private var invBB:BoundingBox;
 		
 		private var midP:Vector3D;
@@ -39,11 +44,13 @@ package com.lhm3d.viewtree
 		private var minP:Vector3D;
 		private var maxP:Vector3D;
 		
-		public static var itDepth:int = 3;
+		public static var itDepth:int = 4;
 		
 		public var objectRefs:Vector.<int> = new Vector.<int>();
 		
 		public var iteration:int = 0;
+		
+		private var cube:Tex3DObject = null;
 		
 		public function OctreeSibling(_minP:Vector3D, _maxP:Vector3D):void
 		{
@@ -75,6 +82,12 @@ package com.lhm3d.viewtree
 					}
 				
 				}
+				
+				
+				if ((objectRefs.length > 0) && (cube != null)) {
+					cube.renderWithMatrix(new Matrix3D(),Context3DTriangleFace.NONE,Context3DBlendFactor.ONE,Context3DBlendFactor.ONE);
+				}
+				
 				
 				return;
 			}
@@ -112,11 +125,15 @@ package com.lhm3d.viewtree
 			
 			iteration = _iteration;
 			
-
+		
+		
 			if (iteration == itDepth) {
+				cube = bb.buildTex3DObject(TextureManager.dummyTextureIndex);
+				
 				objectRefs.push(_oref);
 				return;
-			}
+			} 
+			
 			
 			var _bb1:BoundingBox = new BoundingBox(minP, new Vector3D((minP.x+maxP.x)/2,(minP.y+maxP.y)/2,(minP.z+maxP.z)/2));
 			var _bb2:BoundingBox = new BoundingBox(new Vector3D((minP.x+maxP.x)/2,minP.y,minP.z), new Vector3D(maxP.x,(minP.y+maxP.y)/2,(minP.z+maxP.z)/2));	
@@ -131,7 +148,7 @@ package com.lhm3d.viewtree
 			var _f:Boolean = false;
 			
 			
-			if (_bb1.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb1.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib1Used == false) {
 					sib1 = new OctreeSibling(_bb1.getAaMin(),_bb1.getAaMax());
@@ -141,7 +158,7 @@ package com.lhm3d.viewtree
 				sib1.addObject(_oref,_objectBB,iteration+1);
 			}			
 			
-			if (_bb2.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb2.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib2Used == false) {
 					sib2  = new OctreeSibling(_bb2.getAaMin(),_bb2.getAaMax());
@@ -151,7 +168,7 @@ package com.lhm3d.viewtree
 				sib2.addObject(_oref,_objectBB,iteration+1);
 			}			
 			
-			if (_bb3.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb3.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib3Used == false) {
 					sib3 = new OctreeSibling(_bb3.getAaMin(),_bb3.getAaMax());
@@ -161,7 +178,7 @@ package com.lhm3d.viewtree
 				sib3.addObject(_oref,_objectBB,iteration+1);
 			}			
 
-			if (_bb4.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb4.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib4Used == false) {
 					sib4 = new OctreeSibling(_bb4.getAaMin(),_bb4.getAaMax());
@@ -171,7 +188,7 @@ package com.lhm3d.viewtree
 				sib4.addObject(_oref,_objectBB,iteration+1);
 			}		
 			
-			if (_bb5.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb5.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib5Used == false) {
 					sib5 = new OctreeSibling(_bb5.getAaMin(),_bb5.getAaMax());
@@ -181,7 +198,7 @@ package com.lhm3d.viewtree
 				sib5.addObject(_oref,_objectBB,iteration+1);
 			}	
 			
-			if (_bb6.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb6.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib6Used == false) {
 					sib6 = new OctreeSibling(_bb6.getAaMin(),_bb6.getAaMax());
@@ -191,7 +208,7 @@ package com.lhm3d.viewtree
 				sib6.addObject(_oref,_objectBB,iteration+1);
 			}	
 			
-			if (_bb7.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb7.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib7Used == false) {
 					sib7 = new OctreeSibling(_bb7.getAaMin(),_bb7.getAaMax());
@@ -201,7 +218,7 @@ package com.lhm3d.viewtree
 				sib7.addObject(_oref,_objectBB,iteration+1);
 			}
 			
-			if (_bb8.icludesOtherNonAaBB(_objectBB)) {
+			if (_bb8.intersectsOtherNonAaBB(_objectBB)) {
 				_f = true;
 				if (sib8Used == false) {
 					sib8 = new OctreeSibling(_bb8.getAaMin(),_bb8.getAaMax());
@@ -212,11 +229,11 @@ package com.lhm3d.viewtree
 			}
 			
 			
-			if (_f == false) {
-				
-				trace("keine passende Bounding-Box gefunden (object außerhalb) !");
 			
+			if (_f == false) {
+				trace("keine passende Bounding-Box gefunden (object außerhalb) !");
 			}
+			
 			
 		
 		}

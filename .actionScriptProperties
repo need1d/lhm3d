@@ -41,12 +41,11 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="SceneTest.as"/>
-    <application path="CoinDozer.as"/>
-    <application path="MaterialTest.as"/>
     <application path="LHM3D.as"/>
+    <application path="MaterialTest.as"/>
+    <application path="CoinDozer.as"/>
     <application path="FlexUnitCompilerApplication.as"/>
-    <application path="OctreeTest.as"/>
+    <application path="SceneTest.as"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

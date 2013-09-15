@@ -117,7 +117,7 @@ package
 			if ( !Globals.context3D ) 
 			return;
 			
-			Globals.context3D.clear(1.0,1.0,1.0);
+			Globals.context3D.clear(0.0,0.0,1.0);
 			Globals.renderedObjectCount = 0;
 			
 			

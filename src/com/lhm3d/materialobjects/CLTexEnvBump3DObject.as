@@ -11,7 +11,9 @@ package com.lhm3d.materialobjects
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DTextureFormat;
+	import flash.display3D.Context3DBlendFactor;
 	import flash.display3D.Context3DVertexBufferFormat;
+	import flash.display3D.Context3DTriangleFace;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
 	import flash.display3D.VertexBuffer3D;
@@ -25,6 +27,8 @@ package com.lhm3d.materialobjects
 	
 	public class CLTexEnvBump3DObject extends Base3DObject
 	{
+		
+		private static var program:Program3D = null;
 		
 		private var textureIndex:int;
 		private var textureIndex2:int;
@@ -59,58 +63,60 @@ package com.lhm3d.materialobjects
 			indexbuffer = Globals.context3D.createIndexBuffer(_indexLayer.length);			
 			indexbuffer.uploadFromVector (_indexLayer, 0, _indexLayer.length);	
 			
-			var vertexShaderAssembler : AGALMiniAssembler = new AGALMiniAssembler();
-			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX,
-				"m44 op, va0, vc0\n" + // pos to clipspace
-				
-				"m33 vt0.xyz, va1.xyz, vc4\n" +  
-				"mov v1, vt0.xyz \n" + 
-				
-				"mov v2, va2\n" + 		// uv's in v2
-				
-				"m33 vt0.xyz, va1.xyz, vc8\n" + 
-				"mul vt0.xyz, vt0.xyz, vc12\n"+
-				"add v0, vt0.xyz, vc12"
-			);	
+			if (program == null) {
 			
+				var vertexShaderAssembler : AGALMiniAssembler = new AGALMiniAssembler();
+				vertexShaderAssembler.assemble( Context3DProgramType.VERTEX,
+					"m44 op, va0, vc0\n" + // pos to clipspace
+					
+					"m33 vt0.xyz, va1.xyz, vc4\n" +  
+					"mov v1, vt0.xyz \n" + 
+					
+					"mov v2, va2\n" + 		// uv's in v2
+					
+					"m33 vt0.xyz, va1.xyz, vc8\n" + 
+					"mul vt0.xyz, vt0.xyz, vc12\n"+
+					"add v0, vt0.xyz, vc12"
+				);	
+				
+				
+				var fragmentShaderAssembler : AGALMiniAssembler= new AGALMiniAssembler();
+				fragmentShaderAssembler.assemble( Context3DProgramType.FRAGMENT,
+					"tex ft2, v2, fs0 <2d,clamp,linear> \n"+  //sample texture in ft2
+					
+					"mul ft2, ft2, fc3 \n"+ 	//basis-colorierung
+					
+					"tex ft1, v2, fs2 \n"+ 		//bump map coords
+					"mul ft3, v0, ft1 \n"+		// in ft3 ist nun mormal reflektion
+					"mul ft4, v1, ft1 \n"+		// in ft4 ist nun mormal mit kamera mitgehend
+					
+					"tex ft1, ft3, fs1 <2d,clamp,linear> \n"+  //env map texture in ft1
+					"mul ft1, ft1, fc6 \n"+
+					"add ft2, ft2, ft1 \n"+ 
+					
+					"dp3 ft1, fc1, ft4 \n"+		//dot the transformed normal with  light direction
+					"sat ft1, ft1 \n"+			// keine negativen werte
+					"mul ft3, ft1, fc4 \n" + 	//in ft3 normale * licht rgb
+					"add ft2, ft2, ft3 \n" +	//zur farbe addieren
+					
+					"dp3 ft1, fc2, ft4 \n"+     //dot the transformed normal with inverse light direction
+					"sat ft1, ft1 \n"+		    //keine Negativen werte
+					"sub ft3, fc5, ft2 \n" + 	//
+					"mul ft3, ft3, ft1 \n" + 	//
+					"add ft2, ft3, ft2 \n" +	//zur farbe addieren
+					
+					"mov oc, ft2"         		//output the color
+				);
+				
+				
+				program = Globals.context3D.createProgram();
+				program.upload( vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
 			
-			var fragmentShaderAssembler : AGALMiniAssembler= new AGALMiniAssembler();
-			fragmentShaderAssembler.assemble( Context3DProgramType.FRAGMENT,
-				"tex ft2, v2, fs0 <2d,clamp,linear> \n"+  //sample texture in ft2
-				
-				"mul ft2, ft2, fc3 \n"+ 	//basis-colorierung
-				
-				"tex ft1, v2, fs2 \n"+ 		//bump map coords
-				"mul ft3, v0, ft1 \n"+		// in ft3 ist nun mormal reflektion
-				"mul ft4, v1, ft1 \n"+		// in ft4 ist nun mormal mit kamera mitgehend
-				
-				"tex ft1, ft3, fs1 <2d,clamp,linear> \n"+  //env map texture in ft1
-				"mul ft1, ft1, fc6 \n"+
-				"add ft2, ft2, ft1 \n"+ 
-				
-				"dp3 ft1, fc1, ft4 \n"+		//dot the transformed normal with  light direction
-				"sat ft1, ft1 \n"+			// keine negativen werte
-				"mul ft3, ft1, fc4 \n" + 	//in ft3 normale * licht rgb
-				"add ft2, ft2, ft3 \n" +	//zur farbe addieren
-				
-				"dp3 ft1, fc2, ft4 \n"+     //dot the transformed normal with inverse light direction
-				"sat ft1, ft1 \n"+		    //keine Negativen werte
-				"sub ft3, fc5, ft2 \n" + 	//
-				"mul ft3, ft3, ft1 \n" + 	//
-				"add ft2, ft3, ft2 \n" +	//zur farbe addieren
-				
-				"mov oc, ft2"         		//output the color
-			);
-			
-			
-			program = Globals.context3D.createProgram();
-			program.upload( vertexShaderAssembler.agalcode, fragmentShaderAssembler.agalcode);
-			
-			
+			}
 		}
 		
 		
-		public override function renderWithMatrix(_mat:Matrix3D):void  {			
+		public override function renderWithMatrix(_mat:Matrix3D, _cull:String = Context3DTriangleFace.FRONT, _blend1:String = Context3DBlendFactor.ONE, _blend2:String = Context3DBlendFactor.ZERO):void  {			
 			var _m:Matrix3D = _mat.clone();
 			
 			_m.append(Camera.viewMatrix);
@@ -147,6 +153,8 @@ package com.lhm3d.materialobjects
 			
 			Globals.context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 6, Vector.<Number>([envAmount, envAmount, envAmount, envAmount])); //fc6, envMap mix
 			
+			Globals.context3D.setBlendFactors(_blend1, _blend2);
+			Globals.context3D.setCulling(_cull);
 			Globals.context3D.drawTriangles(indexbuffer);
 			
 			

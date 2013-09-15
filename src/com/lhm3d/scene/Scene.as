@@ -36,7 +36,7 @@ package com.lhm3d.scene
 		private var differentObjects:Vector.<String> = new Vector.<String>();
 		private var objectLoaders:Vector.<BaseObjectLoader> = new Vector.<BaseObjectLoader>();
 		
-		private var objects:Vector.<Base3DObject> = new Vector.<Base3DObject>();
+		public var objects:Vector.<Base3DObject> = new Vector.<Base3DObject>();
 		
 		private var pathFolder:String;
 		
@@ -84,7 +84,9 @@ package com.lhm3d.scene
 					var _subStr:Array = lines[i].split(" ");			
 					var _name:String = _subStr[0].split(".")[0];
 					
-					sceneEntities.push(new SceneEntity(_name,Number(_subStr[1]),Number(_subStr[3]),Number(_subStr[2]),-Number(_subStr[4])*(180.0/Math.PI),-Number(_subStr[6])*(180.0/Math.PI),-Number(_subStr[5])*(180.0/Math.PI),Number(_subStr[7])));
+					sceneEntities.push(new SceneEntity(_name,Number(_subStr[1]),Number(_subStr[2]),Number(_subStr[3]), 
+															 Number(_subStr[4])*(180.0/Math.PI),Number(_subStr[5])*(180.0/Math.PI),Number(_subStr[6])*(180.0/Math.PI),
+															 Number(_subStr[7])));
 					var _found:Boolean = false;
 					for (var o:int = 0; o < differentObjects.length; o++) {
 						if (differentObjects[o] == _name) _found = true;
@@ -180,7 +182,6 @@ package com.lhm3d.scene
 					
 					
 				} else {
-				
 					objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
 				}
 			}
@@ -219,7 +220,7 @@ package com.lhm3d.scene
 			trace("max:", maxX, maxY, maxZ);
 			
 
-			ViewTree.init(new Vector3D(minX,minY,minZ), new Vector3D(maxX,maxY,maxZ),3);
+			ViewTree.init(new Vector3D(minX,minY,minZ), new Vector3D(maxX,maxY,maxZ),5);
 			
 			var _ref:Vector.<int> = new Vector.<int>();
 			
@@ -235,7 +236,7 @@ package com.lhm3d.scene
 				}
 				
 				if (_objectIndex!= -1) {
-					ViewTree.addObjectAtPosRotScale(_ref[_objectIndex],sceneEntities[i].x,sceneEntities[i].y,sceneEntities[i].z,sceneEntities[i].rx,sceneEntities[i].ry,sceneEntities[i].rz,sceneEntities[i].scale);
+					/*if (i == 6)*/ ViewTree.addObjectAtPosRotScale(_ref[_objectIndex],sceneEntities[i].x,sceneEntities[i].y,sceneEntities[i].z,sceneEntities[i].rx,sceneEntities[i].ry,sceneEntities[i].rz,sceneEntities[i].scale);
 				}
 					
 				
