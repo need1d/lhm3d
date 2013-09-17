@@ -83,14 +83,16 @@ package com.lhm3d.scene
 					var _cubeMapName:String = "none";
 					var _envAmount:Number = 0.5;
 					var _lightNr:int = 0;
+					var _split:int = 0;
 					
 					if (data.materials[i].hasOwnProperty("assign")) _assign = data.materials[i].assign;
 					if (data.materials[i].hasOwnProperty("material")) _material = data.materials[i].material;
 					if (data.materials[i].hasOwnProperty("cubeMap")) _cubeMapName = data.materials[i].cubeMap;
 					if (data.materials[i].hasOwnProperty("envAmount")) _envAmount = data.materials[i].envAmount;
 					if (data.materials[i].hasOwnProperty("light")) _lightNr = data.materials[i].light;
+					if (data.materials[i].hasOwnProperty("split")) _split = data.materials[i].split;
 					
-					objectMaterials.push( new ObjectMaterialEntity(_assign,_material,_cubeMapName,_envAmount,_lightNr));
+					objectMaterials.push( new ObjectMaterialEntity(_assign,_material,_cubeMapName,_envAmount,_lightNr, _split));
 				}
 			}
 			

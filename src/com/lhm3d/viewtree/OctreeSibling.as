@@ -124,9 +124,7 @@ package com.lhm3d.viewtree
 		public function addObject(_oref:int, _objectBB:BoundingBox, _iteration:int):void {
 			
 			iteration = _iteration;
-			
-		
-		
+					
 			if (iteration == itDepth) {
 				cube = bb.buildTex3DObject(TextureManager.dummyTextureIndex);
 				

@@ -10,6 +10,7 @@ package com.lhm3d.scene
 		public var cubeMapName:String;
 		public var envAmount:Number;
 		public var lightIndex:int;
+		public var split:int;
 		
 		public var texIndex1:int;
 		public var texIndex2:int;
@@ -17,13 +18,15 @@ package com.lhm3d.scene
 		public var textureData:Vector.<TextureLoader> = new Vector.<TextureLoader>();
 		
 		
-		public function ObjectMaterialEntity(_assign:String, _material:String, _cubeMapName:String, _envAmount:Number, _light:int) : void
+		public function ObjectMaterialEntity(_assign:String, _material:String, _cubeMapName:String, _envAmount:Number, _light:int, _split:int) : void
 		{
 			assign = _assign;
 			material = _material;
 			cubeMapName = _cubeMapName;
 			envAmount = _envAmount;
 			lightIndex = _light;
+			split = _split;
+		
 		}
 		
 		

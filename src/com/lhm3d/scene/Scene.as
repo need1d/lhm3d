@@ -36,7 +36,7 @@ package com.lhm3d.scene
 		private var differentObjects:Vector.<String> = new Vector.<String>();
 		private var objectLoaders:Vector.<BaseObjectLoader> = new Vector.<BaseObjectLoader>();
 		
-		public var objects:Vector.<Base3DObject> = new Vector.<Base3DObject>();
+		public var objects:Vector.<Vector.<Base3DObject>> = new Vector.<Vector.<Base3DObject>>();
 		
 		private var pathFolder:String;
 		
@@ -138,15 +138,13 @@ package com.lhm3d.scene
 			
 			// building up the cube maps
 			for (var i:int = 0; i < materialParser.cubeMaps.length; i++) {
-				trace("hier cube maps");	
 				materialParser.cubeMaps[i].index = TextureManager.addCubeTextureFromBMD(materialParser.cubeMaps[i].cubeTextureData[0].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[1].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[2].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[3].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[4].getBitmapData(),materialParser.cubeMaps[i].cubeTextureData[5].getBitmapData());
 			}
 			
 			// building up normal Texture Maps
 			for (i = 0; i < materialParser.objectMaterials.length; i++) {
 				if (materialParser.objectMaterials[i].textureData.length > 0) materialParser.objectMaterials[i].texIndex1 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[0].getBitmapData());
-				if (materialParser.objectMaterials[i].textureData.length > 1) materialParser.objectMaterials[i].texIndex2 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[1].getBitmapData());
-				trace("hier texture maps maps", materialParser.objectMaterials[i].textureData.length);	
+				if (materialParser.objectMaterials[i].textureData.length > 1) materialParser.objectMaterials[i].texIndex2 = TextureManager.addTextureFromBMD(materialParser.objectMaterials[i].textureData[1].getBitmapData());	
 			}
 			
 			
@@ -171,22 +169,56 @@ package com.lhm3d.scene
 				
 				if (_matIndex > -1) {
 					
+					var _didSplit:Boolean = false;
+					
+					// checken, ob splitten
+					if (materialParser.objectMaterials[_matIndex].split > 0) {
+						objectLoaders[i].doSplit(materialParser.objectMaterials[_matIndex].split);
+						_didSplit = true;
+					}
+					
+					var _subObjects:Vector.<Base3DObject> = new Vector.<Base3DObject>();
+
+					
+					
 					if (materialParser.objectMaterials[_matIndex].material == "CLTexCubeBumpFresnel") {
-						objects.push(MaterialFactory.buildCLTexCubeEnvBumpFresnelObject(materialParser.objectMaterials[_matIndex].envAmount,
+						if (!_didSplit) {
+							_subObjects.push(MaterialFactory.buildCLTexCubeEnvBumpFresnelObject(materialParser.objectMaterials[_matIndex].envAmount,
 																						materialParser.objectMaterials[_matIndex].texIndex1,
 																						getCubeMapIndex(materialParser.objectMaterials[_matIndex].cubeMapName),
 																						materialParser.objectMaterials[_matIndex].texIndex2,objectLoaders[i]));
-																						
-						trace("hier materials");	
+						} else {
+							for (o = 0; o < objectLoaders[i].getSplitPartLength(); o++) {
+								_subObjects.push(new CLTexCubeBumpFresnel3DObject(materialParser.objectMaterials[_matIndex].envAmount,
+																					materialParser.objectMaterials[_matIndex].texIndex1, 
+																					getCubeMapIndex(materialParser.objectMaterials[_matIndex].cubeMapName), 
+																					materialParser.objectMaterials[_matIndex].texIndex2,
+																					objectLoaders[i].getSplitVertexLayer(o),
+																					objectLoaders[i].getSplitNormalLayer(o),
+																					objectLoaders[i].getSplitUVLayer(o),
+																					objectLoaders[i].getSplitIndexLayer(o)));
+							
+							}
+
+						}															
 					}
 					
 					
+					
+					
+					
+					objects.push(_subObjects);	
+					
 				} else {
-					objects.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
+					// wenn kein Material gefunden, wird es auch nicht gesplittet
+					var _subObjectsFallBack:Vector.<Base3DObject> = new Vector.<Base3DObject>();
+					_subObjectsFallBack.push(new Tex3DObject(_dummyTexture,objectLoaders[i].getVertexLayer(),objectLoaders[i].getUVLayer(),objectLoaders[i].getIndexLayer()));
+					objects.push(_subObjectsFallBack);	
 				}
 			}
 			
 			for (i = 0; i < sceneEntities.length; i++) {
+				// maybe optimize here (hash)
 				var _objectIndex:int = -1;
 				for (o = 0; o < differentObjects.length; o++) {
 					if (differentObjects[o] == sceneEntities[i].name) _objectIndex = o; 
@@ -194,49 +226,56 @@ package com.lhm3d.scene
 				
 				if (_objectIndex!= -1) {
 					
-					var _minX:Number = sceneEntities[i].x - objects[_objectIndex].getRadius() * sceneEntities[i].scale;
-					var _maxX:Number = sceneEntities[i].x + objects[_objectIndex].getRadius() * sceneEntities[i].scale;
-					
-					var _minY:Number = sceneEntities[i].y - objects[_objectIndex].getRadius() * sceneEntities[i].scale;
-					var _maxY:Number = sceneEntities[i].y + objects[_objectIndex].getRadius() * sceneEntities[i].scale;
-					
-					var _minZ:Number = sceneEntities[i].z - objects[_objectIndex].getRadius() * sceneEntities[i].scale;
-					var _maxZ:Number = sceneEntities[i].z + objects[_objectIndex].getRadius() * sceneEntities[i].scale;
-					
-					if (_minX < minX) minX = _minX;
-					if (_maxX > maxX) maxX = _maxX;
-					
-					if (_minY < minY) minY = _minY;
-					if (_maxY > maxY) maxY = _maxY;
-					
-					if (_minZ < minZ) minZ = _minZ;
-					if (_maxZ > maxZ) maxZ = _maxZ;					
+					for (o = 0; o < objects[_objectIndex].length; o++) {
+						var _minX:Number = sceneEntities[i].x - objects[_objectIndex][o].getRadius() * sceneEntities[i].scale;
+						var _maxX:Number = sceneEntities[i].x + objects[_objectIndex][o].getRadius() * sceneEntities[i].scale;
+						
+						var _minY:Number = sceneEntities[i].y - objects[_objectIndex][o].getRadius() * sceneEntities[i].scale;
+						var _maxY:Number = sceneEntities[i].y + objects[_objectIndex][o].getRadius() * sceneEntities[i].scale;
+						
+						var _minZ:Number = sceneEntities[i].z - objects[_objectIndex][o].getRadius() * sceneEntities[i].scale;
+						var _maxZ:Number = sceneEntities[i].z + objects[_objectIndex][o].getRadius() * sceneEntities[i].scale;
+						
+						if (_minX < minX) minX = _minX;
+						if (_maxX > maxX) maxX = _maxX;
+						
+						if (_minY < minY) minY = _minY;
+						if (_maxY > maxY) maxY = _maxY;
+						
+						if (_minZ < minZ) minZ = _minZ;
+						if (_maxZ > maxZ) maxZ = _maxZ;
+					}
 					
 				}
 				
 			}
 			
-			trace("mins:", minX, minY, minZ);
-			trace("max:", maxX, maxY, maxZ);
 			
-
 			ViewTree.init(new Vector3D(minX,minY,minZ), new Vector3D(maxX,maxY,maxZ),5);
 			
-			var _ref:Vector.<int> = new Vector.<int>();
+			var _ref:Vector.<Vector.<int>> = new Vector.<Vector.<int>>();
 			
 			for (o = 0; o < objects.length; o++) {
-				_ref.push(ViewTree.submitObjectToContainer(objects[o]));
+				var _subref:Vector.<int> = new Vector.<int>();
+				
+				for (i = 0; i < objects[o].length; i++) {
+					_subref.push(ViewTree.submitObjectToContainer(objects[o][i]));
+				}
+				_ref.push(_subref);
 			}
 			
 			for (i = 0; i < sceneEntities.length; i++) {
 				
+				// maybe optimize here (hash)
 				_objectIndex = -1;
 				for (o = 0; o < differentObjects.length; o++) {
 					if (differentObjects[o] == sceneEntities[i].name) _objectIndex = o; 
 				}
 				
 				if (_objectIndex!= -1) {
-					/*if (i == 6)*/ ViewTree.addObjectAtPosRotScale(_ref[_objectIndex],sceneEntities[i].x,sceneEntities[i].y,sceneEntities[i].z,sceneEntities[i].rx,sceneEntities[i].ry,sceneEntities[i].rz,sceneEntities[i].scale);
+					for (o = 0; o < _ref[_objectIndex].length; o++) {
+						ViewTree.addObjectAtPosRotScale(_ref[_objectIndex][o],sceneEntities[i].x,sceneEntities[i].y,sceneEntities[i].z,sceneEntities[i].rx,sceneEntities[i].ry,sceneEntities[i].rz,sceneEntities[i].scale);
+					}
 				}
 					
 				
@@ -247,7 +286,6 @@ package com.lhm3d.scene
 		
 		public function render() : void 
 		{
-			//trace("ja, render");
 			ViewTree.render();
 		}
 		

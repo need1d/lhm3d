@@ -31,7 +31,8 @@
 			"assign": "Track",
 			"material": "CLTexCubeBumpFresnel",
 			"cubeMap": "cube1", 
-			"envAmount" : 0.7
+			"envAmount" : 0.7,
+			"split" : 20
 		},
 		
 		{	
