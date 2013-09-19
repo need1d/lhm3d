@@ -149,13 +149,13 @@ package com.lhm3d.scene
 			
 			
 			// get bounding box for scene by using radius of placed objects
-			var minX:Number = Number.MAX_VALUE;
-			var minY:Number = Number.MAX_VALUE;
-			var minZ:Number = Number.MAX_VALUE;
+			var minX:Number = 999999;
+			var minY:Number = 999999;
+			var minZ:Number = 999999;
 			
-			var maxX:Number = Number.MIN_VALUE;
-			var maxY:Number = Number.MIN_VALUE;
-			var maxZ:Number = Number.MIN_VALUE;
+			var maxX:Number = -999999;
+			var maxY:Number = -999999;
+			var maxZ:Number = -999999;
 			
 			// add objects to scene first
 			for (i = 0; i < differentObjects.length; i++) {
@@ -284,9 +284,9 @@ package com.lhm3d.scene
 		
 		}
 		
-		public function render() : void 
+		public function render(_notRenderIndex:int) : void 
 		{
-			ViewTree.render();
+			ViewTree.render(_notRenderIndex);
 		}
 		
 		

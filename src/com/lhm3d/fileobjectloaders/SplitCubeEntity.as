@@ -10,6 +10,8 @@ package com.lhm3d.fileobjectloaders
 		public function SplitCubeEntity(_x:Number, _y:Number, _z:Number, _sideLength:Number, _vertexLayer:Vector.<Number>, _indexLayer:Vector.<uint>):void
 		{
 			
+			trace(_sideLength);
+			
 			var _minX:Number = 	_x - _sideLength / 2;
 			var _minY:Number = 	_y - _sideLength / 2;
 			var _minZ:Number = 	_z - _sideLength / 2;

@@ -69,38 +69,52 @@ package com.lhm3d.viewtree
 		}
 		
 		
-		public function render():void {
+		public function render(_notRenderIndex:int):void {
 			
 			if (iteration == itDepth) {
+				
+				
+				var _cubeSubbed:Boolean = false;
+				
 				for (var i:int = 0; i < objectRefs.length; i++) {
 					var _index:int = objectRefs[i];
 					
+					if (_notRenderIndex % ViewTree.objects.length != _index) {
+						
+					} else {
+						_cubeSubbed = true;
+					
+					}
+					
 					if(ViewTree.objects[_index].rendered == false) {
 						ViewTree.objects[_index].rendered = true;
-						ViewTree.objectContainer[ViewTree.objects[_index].ref].renderWithMatrix(ViewTree.objects[_index].m);
+						
+						
+						if (!_cubeSubbed)	ViewTree.objectContainer[ViewTree.objects[_index].ref].renderWithMatrix(ViewTree.objects[_index].m);
+
 						Globals.renderedObjectCount ++;
 					}
 				
 				}
 				
-				
-				if ((objectRefs.length > 0) && (cube != null)) {
-					cube.renderWithMatrix(new Matrix3D(),Context3DTriangleFace.NONE,Context3DBlendFactor.ONE,Context3DBlendFactor.ONE);
+				if (!_cubeSubbed) {
+					if ((objectRefs.length > 0) && (cube != null)) {
+						cube.renderWithMatrix(new Matrix3D(),Context3DTriangleFace.NONE,Context3DBlendFactor.ONE,Context3DBlendFactor.ONE);
+					}
 				}
-				
 				
 				return;
 			}
 		
 			// schnelle Abfrage aller siblings
-			if (sib1Used) {if (visTest(sib1)) { sib1.render(); }}
-			if (sib2Used) {if (visTest(sib2)) { sib2.render(); }}
-			if (sib3Used) {if (visTest(sib3)) { sib3.render(); }}
-			if (sib4Used) {if (visTest(sib4)) { sib4.render(); }}
-			if (sib5Used) {if (visTest(sib5)) { sib5.render(); }}
-			if (sib6Used) {if (visTest(sib6)) { sib6.render(); }}
-			if (sib7Used) {if (visTest(sib7)) { sib7.render(); }}
-			if (sib8Used) {if (visTest(sib8)) { sib8.render(); }}
+			if (sib1Used) {if (visTest(sib1)) { sib1.render(_notRenderIndex); }}
+			if (sib2Used) {if (visTest(sib2)) { sib2.render(_notRenderIndex); }}
+			if (sib3Used) {if (visTest(sib3)) { sib3.render(_notRenderIndex); }}
+			if (sib4Used) {if (visTest(sib4)) { sib4.render(_notRenderIndex); }}
+			if (sib5Used) {if (visTest(sib5)) { sib5.render(_notRenderIndex); }}
+			if (sib6Used) {if (visTest(sib6)) { sib6.render(_notRenderIndex); }}
+			if (sib7Used) {if (visTest(sib7)) { sib7.render(_notRenderIndex); }}
+			if (sib8Used) {if (visTest(sib8)) { sib8.render(_notRenderIndex); }}
 		
 		}
 		
@@ -126,7 +140,7 @@ package com.lhm3d.viewtree
 			iteration = _iteration;
 					
 			if (iteration == itDepth) {
-				cube = bb.buildTex3DObject(TextureManager.dummyTextureIndex);
+				cube = _objectBB.buildTex3DObject(TextureManager.dummyTextureIndex);
 				
 				objectRefs.push(_oref);
 				return;

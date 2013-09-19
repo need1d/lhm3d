@@ -31,6 +31,8 @@ package
 		
 		private var bbObject:Vector.<Tex3DObject> = new Vector.<Tex3DObject>();
 		
+		private var upd:int = 0;
+		
 		public function SceneTest() 
 		{
 			super();
@@ -62,17 +64,16 @@ package
 		
 		public override function update():void {
 			Camera.updateFlyCamera();
+			upd++;
 		}
 		
 		public override function render():void {
 			Camera.setFlyCamera();
 		
-			scene.render();
+			scene.render(upd / 20);
 			
 			var _m:Matrix3D = new Matrix3D();
 			
-			//for (var i:int = 0; i < bbObject.length; i++)
-			//bbObject[i].renderWithMatrix(_m,Context3DTriangleFace.NONE,Context3DBlendFactor.ONE,Context3DBlendFactor.ONE);
 			
 		}
 		

@@ -210,8 +210,8 @@ package com.lhm3d.fileobjectloaders
 		
 		private function getMinMax():void {
 			
-			minP = new Vector3D(Number.MAX_VALUE,Number.MAX_VALUE,Number.MAX_VALUE);
-			maxP = new Vector3D(Number.MIN_VALUE,Number.MIN_VALUE,Number.MIN_VALUE);
+			minP = new Vector3D(999999,999999,999999);
+			maxP = new Vector3D(-999999,-999999,-999999);
 			
 			for (var i:int = 0; i < vertexLayer.length / 3; i++) {
 				var _index:int = i*3;

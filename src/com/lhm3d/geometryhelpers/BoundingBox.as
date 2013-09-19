@@ -19,8 +19,18 @@ package com.lhm3d.geometryhelpers
 		private var eSave:Vector.<Number>;
 		private var boundsSave:Vector.<Vector3D> = new Vector.<Vector3D>();
 		
+		
+		// for debug
+		public var minP:Vector3D;
+		public var maxP:Vector3D;
+		
+		
 		public function BoundingBox(_minP:Vector3D,_maxP:Vector3D)
-		{
+		{	
+			
+			minP = _minP;			
+			maxP = _maxP;
+			
 			center = new Vector3D( (_minP.x+_maxP.x) * 0.5, (_minP.y+_maxP.y) * 0.5, (_minP.z+_maxP.z) * 0.5 );
 			
 			u = new Vector.<Vector3D>();
@@ -85,16 +95,18 @@ package com.lhm3d.geometryhelpers
 				bounds[i] = _m.transformVector(boundsSave[i]);
 			}
 			
-			var _scale:Number = _m.deltaTransformVector(Vector3D.Z_AXIS).length;
+			var _scale:Number = _m.deltaTransformVector(Vector3D.Y_AXIS).length;
 			
 			var raw:Vector.<Number> = _m.rawData;
 			var right:Vector3D = new Vector3D(raw[0], raw[1], raw[2]);
 			var up:Vector3D = new Vector3D(raw[4], raw[5], raw[6]);
 			var out:Vector3D = new Vector3D(raw[8], raw[9], raw[10]);
 			
+			
 			right.normalize();
 			up.normalize();
 			out.normalize();
+			
 			
 			u[0] = right;
 			u[1] = up;
@@ -107,6 +119,8 @@ package com.lhm3d.geometryhelpers
 			e[0] = eSave[0] * _scale;
 			e[1] = eSave[1] * _scale;
 			e[2] = eSave[2] * _scale;
+			
+
 			
 		} 
 		

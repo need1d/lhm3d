@@ -42,6 +42,8 @@ package com.lhm3d.materialobjects
 		private var vertexLayer:Vector.<Number>; // save reference for physics
 		private var indexLayer:Vector.<uint>; // save reference for physics
 		
+		//private var cube:Tex3DObject = null;
+		
 		public function Base3DObject(_vertexLayer:Vector.<Number>, _indexLayer:Vector.<uint>)
 		{
 			
@@ -50,8 +52,8 @@ package com.lhm3d.materialobjects
 			
 			light = Globals.light;
 						
-			var _minP:Vector3D = new Vector3D(Number.MAX_VALUE,Number.MAX_VALUE,Number.MAX_VALUE);
-			var _maxP:Vector3D = new Vector3D(Number.MIN_VALUE,Number.MIN_VALUE,Number.MIN_VALUE);
+			var _minP:Vector3D = new Vector3D(999999,999999,999999);
+			var _maxP:Vector3D = new Vector3D(-999999,-999999,-999999);
 			radius = 0;
 
 			
@@ -73,7 +75,7 @@ package com.lhm3d.materialobjects
 			
 			boundingBox = new BoundingBox(_minP, _maxP); 
 			
-
+			//cube = boundingBox.buildTex3DObject(TextureManager.dummyTextureIndex);
 			
 		}
 		
