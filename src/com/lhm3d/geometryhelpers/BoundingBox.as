@@ -116,10 +116,11 @@ package com.lhm3d.geometryhelpers
 			center.y = (bounds[0].y + bounds[6].y) / 2;
 			center.z = (bounds[0].z + bounds[6].z) / 2;
 			
+			/*
 			e[0] = eSave[0] * _scale;
 			e[1] = eSave[1] * _scale;
 			e[2] = eSave[2] * _scale;
-			
+			*/
 
 			
 		} 

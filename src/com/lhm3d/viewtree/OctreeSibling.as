@@ -88,20 +88,20 @@ package com.lhm3d.viewtree
 					
 					if(ViewTree.objects[_index].rendered == false) {
 						ViewTree.objects[_index].rendered = true;
-						
-						
+					
 						if (!_cubeSubbed)	ViewTree.objectContainer[ViewTree.objects[_index].ref].renderWithMatrix(ViewTree.objects[_index].m);
-
 						Globals.renderedObjectCount ++;
 					}
 				
 				}
+				
 				
 				if (!_cubeSubbed) {
 					if ((objectRefs.length > 0) && (cube != null)) {
 						cube.renderWithMatrix(new Matrix3D(),Context3DTriangleFace.NONE,Context3DBlendFactor.ONE,Context3DBlendFactor.ONE);
 					}
 				}
+				
 				
 				return;
 			}
